@@ -30,7 +30,7 @@ const colors = {
   accent: {
     blue: "#1C1B20", // 100%
     teal: "#A9BF8F", // 100%
-    sand: "#D9D9D9", // 100%
+    sand: "#AD9F8F", // 100%
     sandLight: "#EAE6DF", // 100%
     sandMed: "#EAE6DF70", // 70%
     red: "#EE1D52", // 100%
@@ -38,15 +38,18 @@ const colors = {
   },
 };
 
-// Keep your existing spacing scale
-const space = {
-  xs: "0.5rem",
-  sm: "0.75rem",
-  md: "1rem",
-  lg: "1.5rem",
-  xl: "1.875rem", // Your specific value
-  "2xl": "2.5rem",
-  "3xl": "3.125rem",
+const fontWeights = {
+  hairline: 100,
+  thin: 200,
+  light: 300,
+  normal: 400,
+  medium: 500,
+  semibold: 600,
+  bold: 700,
+  extrabold: 800,
+  black: 900,
+  // Add your custom weight
+  extralight: 200, // Match the font-weight from your @font-face declaration
 };
 
 // Keep your existing fonts
@@ -54,19 +57,21 @@ const fonts = {
   heading: "'Clash Display', sans-serif !important",
   body: "'Clash Display', sans-serif !important",
   mono: "Menlo, monospace",
+  extralight: "ClashDisplay-Extralight, sans-serif !important",
+  light: "ClashDisplay-Light, sans-serif !important",
 };
 
 // Define text styles for typography
 const textStyles = {
   h1: {
     // Remove the nested responsive objects (md, lg, xl)
-    fontSize: ["2rem", "3rem", "4rem", "5rem", "7.875rem"],
+    fontSize: ["2.75rem", "3rem", "4rem", "5rem", "7.875rem"],
     fontWeight: "extra-light",
     lineHeight: "110%",
     letterSpacing: "-0.02em",
   },
   h2: {
-    fontSize: ["1.75rem", "3.75rem", "5.625rem"],
+    fontSize: ["2rem", "3rem", "5.625rem"],
     fontWeight: "semibold",
     lineHeight: "110%",
   },
@@ -76,12 +81,12 @@ const textStyles = {
     lineHeight: "110%",
   },
   h4: {
-    fontSize: ["1.75rem", "1.75rem", "2rem"],
-    fontWeight: "semibold",
+    fontSize: ["1.75rem", "1.75rem", "1.75rem"],
+    fontWeight: "regular",
     lineHeight: "110%",
   },
   h5: {
-    fontSize: ["1.75rem", "1.75rem", "1.5rem"],
+    fontSize: ["1.5rem", "1.5rem", "1.5rem"],
     fontWeight: "semibold",
     lineHeight: "110%",
   },
@@ -91,6 +96,7 @@ const textStyles = {
   },
   text: {
     fontSize: ["1rem", "1.125rem", "1.25rem"],
+    fontWeight: "extralight",
   },
   // Add more as needed
 };
@@ -111,8 +117,8 @@ const radii = {
 const theme = extendTheme({
   colors,
   fonts,
-  space,
   textStyles,
+  fontWeights,
   radii,
   // You can also customize component-specific styles
   components: {
