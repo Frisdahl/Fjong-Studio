@@ -72,7 +72,7 @@ const textStyles = {
   },
   h3: {
     fontSize: ["1.75rem", "1.75rem", "3.75rem"],
-    fontWeight: "semibold",
+    fontWeight: "regular",
     lineHeight: "110%",
   },
   h4: {
