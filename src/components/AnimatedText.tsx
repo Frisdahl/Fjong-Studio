@@ -3,10 +3,10 @@ import { Box } from "@chakra-ui/react";
 import type { TextProps } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-// Constants - adjusted for wave effect
-const DURATION = 0.4; // Slightly longer duration
-const STAGGER = 0.015; // Smaller stagger for smoother wave
-const WAVE_AMPLITUDE = 0.7; // Controls the "peakiness" of the wave
+// Constants - refined for smoother animation
+const DURATION = 0.35; // Slightly faster for smoother feel
+const STAGGER = 0.008; // Much smaller stagger for cohesion
+const WAVE_AMPLITUDE = 0.4; // Reduced amplitude for subtler wave
 
 const MotionBox = motion(Box);
 
@@ -23,9 +23,11 @@ interface AnimatedTextProps {
   stagger?: number;
   height?: string;
   lineHeight?: string;
-  // New wave props
+  // Wave props
   waveEffect?: boolean;
   waveAmplitude?: number;
+  // New smoothness props
+  ease?: string;
 }
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({
@@ -42,6 +44,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   fontWeight = "inherit",
   waveEffect = true,
   waveAmplitude = WAVE_AMPLITUDE,
+  ease = "circOut", // Better easing function for smoothness
 }) => {
   const [isHovered, setIsHovered] = React.useState(false);
   const [hasRendered, setHasRendered] = React.useState(false);
@@ -50,14 +53,20 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     setHasRendered(true);
   }, []);
 
-  // Calculate delay for wave effect
+  // Improved wave delay calculation for smoother flow
   const getWaveDelay = (index: number, total: number) => {
-    if (!waveEffect) return stagger * index;
-
-    // For wave effect, use a sine wave pattern to create a flowing animation
-    // This makes letters in the middle start moving slightly after the first ones
-    const position = index / (total - 1); // 0 to 1
-    const wavePosition = Math.sin(position * Math.PI) * waveAmplitude;
+    if (!waveEffect || total <= 1) return stagger * index;
+    
+    // More subtle sine wave with adjustable phase
+    const position = index / (total - 1);
+    
+    // For very short words, reduce the wave effect further
+    const adjustedAmplitude = total < 5 ? waveAmplitude * 0.5 : waveAmplitude;
+    
+    // Use a smoother sin curve with adjusted phase
+    const wavePosition = Math.sin(position * Math.PI) * adjustedAmplitude;
+    
+    // Create a base delay with a smoother progression
     return stagger * index * (1 + wavePosition);
   };
 
@@ -93,7 +102,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             }}
             transition={{
               duration,
-              ease: "easeInOut",
+              ease, // Use improved easing function
               delay: getWaveDelay(i, totalChars),
               immediate: !hasRendered,
             }}
@@ -116,7 +125,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             }}
             transition={{
               duration,
-              ease: "easeInOut",
+              ease, // Use improved easing function
               delay: getWaveDelay(i, totalChars),
               immediate: !hasRendered,
             }}

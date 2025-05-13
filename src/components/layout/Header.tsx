@@ -98,12 +98,17 @@ function Header() {
   }, []);
 
   return (
-    <Box
+    <HStack
       padding={{ base: "35px 35px", md: "50px 75px" }}
-      position="relative"
       zIndex={999}
+      position="fixed"
+      height={"100px"}
+      width={"100%"}
+      alignItems={"center"}
+      justifyContent={"space-between"}
     >
       <Flex
+        width={"100%"}
         bg="transparent" // Make background transparent so the circle shows through
         alignItems="center"
         justifyContent="space-between"
@@ -273,7 +278,7 @@ function Header() {
           </MotionBox>
         )}
       </AnimatePresence>
-    </Box>
+    </HStack>
   );
 }
 

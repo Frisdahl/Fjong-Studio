@@ -42,7 +42,7 @@ function Homepage() {
         padding={{ base: "0px 35px", md: "0px 75px" }}
       >
         <Box
-          marginTop={{ base: "35px", md: "100px", lg: "100px" }}
+          marginTop={{ base: "35px", md: "100px", lg: "250px" }}
           height={"calc(80vh - 150px)"}
           width="100%"
           display="flex"
