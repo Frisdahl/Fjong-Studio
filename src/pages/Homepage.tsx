@@ -9,7 +9,7 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
-import React, { useRef, useEffect } from "react";
+import { useRef } from "react";
 import playIcon from "../assets/svg/play-icon.svg";
 import SellingCards from "../components/SellingCards";
 import ProjectCards from "../components/ProjectCards";
@@ -18,47 +18,15 @@ import logo from "../assets/svg/logo.svg";
 import AboutUsCards from "../components/AboutUsCards";
 import FAQ from "../components/FAQ";
 import AnimatedText from "../components/AnimatedText";
-import AnimatedButton from "../components/AnimatedButtons";
-import { ScrollRevealText } from "../components/ScrollAnimation";
-import { gsap } from "gsap";
-import { usePageAnimation } from "../context/PageAnimationContext";
 
 function Homepage() {
-  // Create refs
+  // Create a ref for the video element
   const videoRef = useRef<HTMLVideoElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const titleRef = useRef<HTMLDivElement>(null);
-  const subtitleRef = useRef<HTMLDivElement>(null);
 
+  // Add new section refs
   const portfolioRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
-
-  // Use our custom hook instead of useContext
-  const { runPageAnimation } = usePageAnimation();
-
-  // Run the animation when component mounts
-  useEffect(() => {
-    // Set initial state for the header
-    if (headerRef.current) {
-      gsap.set(headerRef.current, { opacity: 0 });
-
-      // Fade in the header container
-      gsap.to(headerRef.current, {
-        opacity: 1,
-        duration: 0.8,
-        delay: 0.25,
-        ease: "power2.out",
-      });
-    }
-
-    // Run the title and subtitle animations
-    // Cast refs if needed to match the type expected by PageAnimationContext
-    runPageAnimation(
-      titleRef as unknown as React.RefObject<Element>,
-      subtitleRef as unknown as React.RefObject<Element>
-    );
-  }, [runPageAnimation]);
 
   const handlePlayClick = () => {
     // Play the video when the play button is clicked
@@ -74,11 +42,9 @@ function Homepage() {
   return (
     <>
       <HStack
-        ref={headerRef} // Master container
         flexDirection={"column"}
         alignItems={"flex-start"}
         padding={{ base: "0px 35px", md: "0px 75px" }}
-        opacity={0}
       >
         <Box
           marginTop={{ base: "35px", md: "100px", lg: "250px" }}
@@ -102,57 +68,35 @@ function Homepage() {
               width="100%"
               gap={"0px"}
             >
-              <Box
-                ref={titleRef} // Title container
+              <Text
                 as="h1"
-                textStyle={"h1"}
-                lineHeight="0.9"
+                textStyle="h1"
+                fontFamily="Clash Display"
+                color="font.dark"
+                fontSize={{
+                  base: "2rem", // Small screens
+                  md: "3rem", // Medium screens
+                  lg: "4rem", // Large screens
+                  xl: "6rem", // Extra-large screens
+                  "2xl": "7.875rem", // Screens wider than 1500px
+                }}
+                whiteSpace="normal"
+                width="auto"
+                marginRight="10px"
               >
-                <ScrollRevealText
-                  direction="up"
-                  stagger={0.015}
-                  duration={0.4}
-                  waveAmplitude={0.6}
-                  threshold={0.2}
-                  ease="power2.out"
-                >
-                  Vi skaber digitale
-                </ScrollRevealText>
-
-                <Box
-                  display="flex"
-                  alignItems="baseline"
-                  as="h1"
-                  textStyle={"h1"}
-                  lineHeight="0.9"
-                >
-                  <ScrollRevealText
-                    direction="up"
-                    stagger={0.008}
-                    duration={0.35}
-                    waveAmplitude={0.4}
-                    delay={0.2}
-                    ease="circOut"
-                  >
-                    oplevelser
-                  </ScrollRevealText>
-
-                  {/* Button wrapper with its own reveal animation */}
-                  <AnimatedButton
+                Vi skaber digitale <br></br> oplevelser{" "}
+                <span>
+                  <Button
                     variant="unstyled"
                     p={0}
                     onClick={handlePlayClick}
+                    _hover={{ transform: "scale(1.1)" }}
+                    transition="transform 0.2s ease"
                     display="inline-flex"
                     alignItems="center"
                     justifyContent="center"
                     flexShrink={0}
                     zIndex={998}
-                    ml={"20px"}
-                    delay={1.0} // Delay this until after text animation
-                    duration={0.1}
-                    animationType="fade-scale"
-                    hoverScale={1.15}
-                    hoverSpeed={0.1}
                   >
                     <Image
                       src={playIcon}
@@ -160,30 +104,20 @@ function Homepage() {
                       width={{ base: "2rem", md: "3.5rem", lg: "5rem" }}
                       height={{ base: "2rem", md: "3.5rem", lg: "5rem" }}
                     />
-                  </AnimatedButton>
-                </Box>
-              </Box>
+                  </Button>
+                </span>
+              </Text>
             </Flex>
 
-            {/* The subtitle with its own animation */}
-            <Box
-              ref={subtitleRef} // Subtitle container
+            <Text
               fontSize={{ base: "md", md: "lg", lg: "xl" }}
-              mt={2}
-              display="flex"
-              alignItems="baseline"
+              fontFamily="ClashDisplay-Light"
+              as={"h4"}
+              textStyle={"h4"}
+              width="100%"
             >
-              <ScrollRevealText
-                direction="up"
-                stagger={0.008}
-                duration={0.35}
-                waveAmplitude={0.4}
-                delay={0.2}
-                ease="circOut"
-              >
-                Hjemmesider, der kombinerer funktion og følelse
-              </ScrollRevealText>
-            </Box>
+              Hjemmesider, der kombinerer funktion og følelse
+            </Text>
           </VStack>
 
           {/* Video container */}
@@ -264,15 +198,10 @@ function Homepage() {
         </Box>
 
         <HStack
-          ref={portfolioRef} // Add this ref
           flexDirection={"column"}
-          padding={{ base: "150px 35px", md: "150px 75px" }}
-          bg={"accent.sandMed"}
-          borderRadius={"100px"}
           width={"100%"}
           alignItems={"flex-start"}
           marginTop={{ base: "50px", md: "150px", lg: "150px" }}
-          id="projekter" // Add an ID for direct linking
         >
           <HStack flexDirection={"column"} alignItems={"flex-start"}>
             <Text
@@ -299,14 +228,8 @@ function Homepage() {
           <Divider />
         </HStack>
       </HStack>
-      <Box id="projekter">
-        <Text as={"h2"} textStyle={"h2"} fontFamily="ClashDisplay-extraLight">
-          vores <br></br> portfolio
-        </Text>
-        {/* Rest of portfolio section */}
-      </Box>
-
       <HStack
+        ref={portfolioRef}
         flexDirection={"column"}
         padding={{ base: "150px 35px", md: "150px 75px" }}
         bg={"accent.sandMed"}
@@ -314,6 +237,7 @@ function Homepage() {
         width={"100%"}
         alignItems={"flex-start"}
         marginTop={{ base: "50px", md: "150px", lg: "150px" }}
+        id="projekter"
       >
         <HStack
           width={"100%"}
@@ -392,14 +316,12 @@ function Homepage() {
         </Grid>
       </HStack>
 
-      <Box id="ydelser">{/* FAQ section */}</Box>
-
       <VStack
-        ref={servicesRef} // Add this ref
+        ref={servicesRef}
         alignItems={"flex-start"}
         width={"100%"}
         padding={"150px 75px"}
-        id="ydelser" // Add an ID for direct linking
+        id="ydelser"
       >
         <VStack alignItems={"flex-start"}>
           <Text
@@ -420,7 +342,12 @@ function Homepage() {
         </Grid>
       </VStack>
 
-      <VStack alignItems={"flex-start"} width={"100%"} padding={"150px 75px"}>
+      <VStack
+        alignItems={"flex-start"}
+        width={"100%"}
+        padding={"150px 75px"}
+        id="ydelser"
+      >
         <VStack alignItems={"flex-start"}>
           <Text
             as={"text"}
@@ -459,12 +386,7 @@ function Homepage() {
         </VStack>
       </VStack>
 
-      <Box id="kontakt">{/* Contact/footer section */}</Box>
-
-      <Box
-        ref={contactRef} // Add this ref
-        id="kontakt" // Add an ID for direct linking
-      >
+      <Box ref={contactRef} id="kontakt">
         {/* Footer content */}
       </Box>
     </>
