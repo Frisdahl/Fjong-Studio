@@ -74,8 +74,8 @@ const textStyles = {
   h1: {
     fontSize: ["2.75rem", "3rem", "4rem", "7.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "extra-light",
-    lineHeight: "110%",
     letterSpacing: "-0.02em",
+    lineHeight: "0.9", // Added this line - value between 0.9-1.0 for tight headings
   },
   h2: {
     fontSize: ["2rem", "3rem", "5.625rem"], // sm, md, lg

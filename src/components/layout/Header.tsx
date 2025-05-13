@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import {
   Box,
   Link,
@@ -12,53 +12,17 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { gsap } from "gsap";
+import { useScroll } from "../../context/ScrollContext";
 import logo from "../../assets/svg/logo.svg";
 import logoWhite from "../../assets/svg/logo-white.svg";
 import BurgerMenuIcon from "../BurgerMenuIcon";
 import AnimatedText from "../AnimatedText"; // Import the AnimatedText component
+import { useLocation } from "react-router-dom"; // Add this import
 
 // Constants and motion components
-
 const MotionBox = motion(Box);
 const MotionImage = motion(Image);
-
-// Updated NavLink component using AnimatedText
-const NavLink: React.FC<NavLinkProps> = ({
-  children,
-  to,
-  isMobile = false,
-  isInverted = false,
-}) => {
-  const text = children?.toString() || "";
-
-  return (
-    <RouterLink
-      to={to}
-      style={{
-        textDecoration: "none",
-        display: "inline-block",
-        height: isMobile ? "5em" : "1.5em",
-        lineHeight: isMobile ? "5em" : "1.5em",
-      }}
-    >
-      <AnimatedText
-        text={text}
-        fontSize={isMobile ? "3.5rem" : "1.125rem"}
-        fontFamily={
-          isMobile ? "ClashDisplay-Extralight" : "'Clash Display', sans-serif"
-        }
-        isInverted={isInverted}
-        height={isMobile ? "1.2em" : "1.5em"}
-        lineHeight={isMobile ? "1.2em" : "1.5em"}
-        // Enhanced wave effect settings for menu items
-        waveEffect={true}
-        waveAmplitude={isMobile ? 1.0 : 0.7} // More pronounced wave for mobile menu
-        duration={isMobile ? 0.5 : 0.4} // Slightly slower for mobile menu
-        stagger={isMobile ? 0.02 : 0.015} // Adjust stagger based on context
-      />
-    </RouterLink>
-  );
-};
 
 interface NavLinkProps {
   children: React.ReactNode;
@@ -67,19 +31,64 @@ interface NavLinkProps {
   isInverted?: boolean;
 }
 
+// Add this interface definition after your other interfaces
+interface SectionObserver {
+  element: Element;
+  observer: IntersectionObserver;
+}
+
 const Links = [
-  { name: "Projekter", path: "/projekter" },
-  { name: "Ydelser", path: "/ydelser" },
-  { name: "Kontakt", path: "/kontakt" },
+  { name: "Projekter", path: "projekter" }, // Changed from "/projekter" to "projekter"
+  { name: "Ydelser", path: "ydelser" }, // Changed from "/ydelser" to "ydelser"
+  { name: "Kontakt", path: "kontakt" }, // Changed from "/kontakt" to "kontakt"
 ];
 
 function Header() {
+  // Add location to detect route changes
+  const location = useLocation();
+
+  // Add activeSection state
+  const [activeSection, setActiveSection] = useState("");
+
+  // Use IntersectionObserver to detect which section is in view
+  useEffect(() => {
+    const sections = ["projekter", "ydelser", "kontakt"];
+    const observers: SectionObserver[] = []; // Add the type annotation here
+
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setActiveSection(sectionId);
+            }
+          },
+          { threshold: 0.3 } // When 30% of the section is visible
+        );
+
+        observer.observe(element);
+        observers.push({ element, observer });
+      }
+    });
+
+    // Cleanup
+    return () => {
+      observers.forEach(({ element, observer }) => {
+        observer.unobserve(element);
+      });
+    };
+  }, []);
+
+  // Rest of your state variables
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toggleRef = React.useRef<HTMLButtonElement>(null);
   const [togglePosition, setTogglePosition] = React.useState({ x: 0, y: 0 });
+  const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  // Update toggle position when it changes
-  React.useEffect(() => {
+  // Add this useLayoutEffect to update the toggle position when it changes
+  useLayoutEffect(() => {
     const updatePosition = () => {
       if (toggleRef.current) {
         const rect = toggleRef.current.getBoundingClientRect();
@@ -90,15 +99,134 @@ function Header() {
       }
     };
 
+    // Update position initially
     updatePosition();
 
-    // Update position on resize
+    // Update position on resize and scroll
     window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
+    window.addEventListener("scroll", updatePosition);
+
+    // Clean up
+    return () => {
+      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener("scroll", updatePosition);
+    };
   }, []);
+
+  // Add this to update position when menu state changes
+  useEffect(() => {
+    if (toggleRef.current) {
+      const rect = toggleRef.current.getBoundingClientRect();
+      setTogglePosition({
+        x: rect.right - rect.width / 2,
+        y: rect.top + rect.height / 2,
+      });
+    }
+  }, [isOpen]);
+
+  // Enhanced animation with reset
+  useEffect(() => {
+    if (headerRef.current) {
+      // Create a reusable timeline for header animations
+      const tl = gsap.timeline();
+
+      // First set initial state or reset to invisible
+      tl.set(headerRef.current, { opacity: 0 });
+
+      // Then animate to visible
+      tl.to(headerRef.current, {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.2,
+      });
+
+      return () => {
+        // Clean up by killing the timeline when unmounting or route changes
+        tl.kill();
+      };
+    }
+  }, [location.pathname]);
+
+  // Track scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      if (scrollPosition > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Updated NavLink component with better scrolling
+  const NavLink: React.FC<NavLinkProps> = ({
+    children,
+    to,
+    isMobile = false,
+    isInverted = false,
+  }) => {
+    const text = children?.toString() || "";
+    const { scrollToSection } = useScroll();
+
+    // Check if this link is for the active section
+    const isActive = to === activeSection;
+
+    // Handle click to scroll instead of navigate
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault();
+
+      // Close the mobile menu if it's open
+      if (isMobile && onClose) {
+        onClose();
+      }
+
+      // Add small delay for mobile menu to close first
+      const delay = isMobile ? 300 : 0;
+      setTimeout(() => {
+        scrollToSection(to);
+      }, delay);
+    };
+
+    return (
+      <Link
+        as="a"
+        href={`#${to}`}
+        onClick={handleClick}
+        textDecoration="none"
+        display="inline-block"
+        height={isMobile ? "5em" : "1.5em"}
+        lineHeight={isMobile ? "5em" : "1.5em"}
+        color={isActive ? "accent.blue" : "inherit"}
+        fontWeight={isActive ? "medium" : "regular"}
+      >
+        <AnimatedText
+          text={text}
+          fontSize={isMobile ? "3.5rem" : "1.125rem"}
+          fontFamily={
+            isMobile ? "ClashDisplay-Extralight" : "'Clash Display', sans-serif"
+          }
+          isInverted={isInverted}
+          height={isMobile ? "1.2em" : "1.5em"}
+          lineHeight={isMobile ? "1.2em" : "1.5em"}
+          waveEffect={true}
+          waveAmplitude={isMobile ? 1.0 : 0.7}
+          duration={isMobile ? 0.5 : 0.4}
+          stagger={isMobile ? 0.02 : 0.015}
+        />
+      </Link>
+    );
+  };
 
   return (
     <HStack
+      ref={headerRef} // Add this ref to your HStack
       padding={{ base: "35px 35px", md: "50px 75px" }}
       zIndex={999}
       position="fixed"
@@ -106,6 +234,19 @@ function Header() {
       width={"100%"}
       alignItems={"center"}
       justifyContent={"space-between"}
+      bg={
+        isOpen
+          ? "transparent"
+          : scrolled
+          ? "rgba(255, 255, 255, 0.8)"
+          : "white.100"
+      }
+      backdropFilter={scrolled ? "blur(10px)" : "none"}
+      transition="all 0.3s ease-in-out"
+      boxShadow={scrolled ? "0 4px 12px rgba(0, 0, 0, 0.05)" : "none"}
+      borderBottom={scrolled ? "1px solid" : "none"}
+      borderColor={scrolled ? "gray.100" : "transparent"}
+      opacity={0} // Start with opacity 0
     >
       <Flex
         width={"100%"}
@@ -237,7 +378,6 @@ function Header() {
       {/* Mobile navigation menu */}
       <AnimatePresence>
         {isOpen && (
-          // Update the Mobile navigation menu section
           <MotionBox
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
