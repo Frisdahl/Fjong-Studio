@@ -15,6 +15,8 @@ import SellingCards from "../components/SellingCards";
 import ProjectCards from "../components/ProjectCards";
 import { Divider } from "@chakra-ui/react";
 import logo from "../assets/logo.svg";
+import AboutUsCards from "../components/AboutUsCards";
+import FAQ from "../components/FAQ";
 
 function Homepage() {
   // Create a ref for the video element
@@ -305,6 +307,53 @@ function Homepage() {
           </GridItem>
         </Grid>
       </HStack>
+
+      <VStack width={"100%"} alignItems={"flex-start"} padding={"150px 75px"}>
+        <VStack alignItems={"flex-start"}>
+          <Text
+            as={"text"}
+            textStyle={"text"}
+            fontFamily="ClashDisplay-extraLight"
+          >
+            vi er
+          </Text>
+          <Text as={"h2"} textStyle={"h2"} fontFamily="ClashDisplay-extraLight">
+            de kreative
+          </Text>
+        </VStack>
+        <Grid templateColumns="repeat(2, 1fr)" gap={"50px"} width="100%">
+          <GridItem>
+            <AboutUsCards />
+          </GridItem>
+        </Grid>
+      </VStack>
+
+      <VStack alignItems={"flex-start"} width={"100%"} padding={"150px 75px"}>
+        <VStack alignItems={"flex-start"}>
+          <Text
+            as={"text"}
+            textStyle={"text"}
+            fontFamily="ClashDisplay-extraLight"
+          >
+            se vores
+          </Text>
+          <Text as={"h2"} textStyle={"h2"} fontFamily="ClashDisplay-extraLight">
+            Ofte stillede spørgsmål
+          </Text>
+        </VStack>
+        <VStack width={"100%"}>
+          <FAQ />
+          <Button
+            bg={"font.dark"}
+            color={"white.cream"}
+            fontWeight={"regular"}
+            _hover={{ bg: "font.dark" }}
+            borderRadius={"50px"}
+          >
+            Se alle spørgsmål
+          </Button>
+        </VStack>
+      </VStack>
     </>
   );
 }

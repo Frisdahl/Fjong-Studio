@@ -1,4 +1,4 @@
-import { HStack, Text, Image, VStack, Center, Box } from "@chakra-ui/react";
+import { HStack, Text, Image, VStack, Center } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Test from "../assets/images/test.webp";

@@ -88,13 +88,13 @@ const textStyles = {
     lineHeight: "110%",
   },
   h4: {
-    fontSize: ["1.75rem", "1.75rem", "1.75rem"], // sm, md, lg
+    fontSize: ["1.75rem", "1.75rem", "2.75rem"], // sm, md, lg
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h5: {
     fontSize: ["1.5rem", "1.5rem", "1.5rem"], // sm, md, lg
-    fontWeight: "semibold",
+    fontWeight: "regular",
     lineHeight: "110%",
   },
   links: {
