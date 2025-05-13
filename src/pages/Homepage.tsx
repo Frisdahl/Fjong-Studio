@@ -10,13 +10,14 @@ import {
   GridItem,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import playIcon from "../assets/play-icon.svg";
+import playIcon from "../assets/svg/play-icon.svg";
 import SellingCards from "../components/SellingCards";
 import ProjectCards from "../components/ProjectCards";
 import { Divider } from "@chakra-ui/react";
-import logo from "../assets/logo.svg";
+import logo from "../assets/svg/logo.svg";
 import AboutUsCards from "../components/AboutUsCards";
 import FAQ from "../components/FAQ";
+import AnimatedText from "../components/AnimatedText";
 
 function Homepage() {
   // Create a ref for the video element
@@ -349,8 +350,20 @@ function Homepage() {
             fontWeight={"regular"}
             _hover={{ bg: "font.dark" }}
             borderRadius={"50px"}
+            py={5}
+            px={8}
+            height="auto"
+            position="relative"
+            overflow="hidden"
           >
-            Se alle spørgsmål
+            <AnimatedText
+              text="Se alle spørgsmål"
+              isInverted={true}
+              height="1.5em"
+              fontSize="1rem"
+              fontWeight="regular"
+              color="white.cream"
+            />
           </Button>
         </VStack>
       </VStack>

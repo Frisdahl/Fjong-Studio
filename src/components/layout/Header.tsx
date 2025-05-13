@@ -12,16 +12,17 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../../assets/logo.svg";
-import logoWhite from "../../assets/logo-white.svg";
+import logo from "../../assets/svg/logo.svg";
+import logoWhite from "../../assets/svg/logo-white.svg";
 import BurgerMenuIcon from "../BurgerMenuIcon";
+import AnimatedText from "../AnimatedText"; // Import the AnimatedText component
+
 // Constants and motion components
-const DURATION = 0.25;
-const STAGGER = 0.025;
+
 const MotionBox = motion(Box);
 const MotionImage = motion(Image);
 
-// NavLink component
+// Updated NavLink component using AnimatedText
 const NavLink: React.FC<NavLinkProps> = ({
   children,
   to,
@@ -29,12 +30,6 @@ const NavLink: React.FC<NavLinkProps> = ({
   isInverted = false,
 }) => {
   const text = children?.toString() || "";
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [hasRendered, setHasRendered] = React.useState(false);
-
-  React.useEffect(() => {
-    setHasRendered(true);
-  }, []);
 
   return (
     <RouterLink
@@ -46,68 +41,21 @@ const NavLink: React.FC<NavLinkProps> = ({
         lineHeight: isMobile ? "5em" : "1.5em",
       }}
     >
-      <Box
-        position="relative"
-        overflow="hidden"
-        height="100%"
-        width="100%"
-        display="inline-block"
+      <AnimatedText
+        text={text}
+        fontSize={isMobile ? "3.5rem" : "1.125rem"}
         fontFamily={
           isMobile ? "ClashDisplay-Extralight" : "'Clash Display', sans-serif"
         }
-        fontSize={isMobile ? "3.5rem" : "1.125rem"}
-        textStyle="links"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        cursor="pointer"
-        color={isInverted ? "white" : "inherit"}
-      >
-        {/* Top text */}
-        <Box width="100%" textAlign="center" position="relative">
-          {text.split("").map((char, i) => (
-            <MotionBox
-              key={`top-${i}`}
-              as="span"
-              display="inline-block"
-              initial={{ y: 0 }}
-              animate={{
-                y: isHovered ? "-100%" : 0,
-              }}
-              transition={{
-                duration: DURATION,
-                ease: "easeInOut",
-                delay: STAGGER * i,
-                immediate: !hasRendered,
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </MotionBox>
-          ))}
-        </Box>
-
-        {/* Bottom text */}
-        <Box position="absolute" inset="0" width="100%" textAlign="center">
-          {text.split("").map((char, i) => (
-            <MotionBox
-              key={`bottom-${i}`}
-              as="span"
-              display="inline-block"
-              initial={{ y: "100%" }}
-              animate={{
-                y: isHovered ? 0 : "100%",
-              }}
-              transition={{
-                duration: DURATION,
-                ease: "easeInOut",
-                delay: STAGGER * i,
-                immediate: !hasRendered,
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </MotionBox>
-          ))}
-        </Box>
-      </Box>
+        isInverted={isInverted}
+        height={isMobile ? "1.2em" : "1.5em"}
+        lineHeight={isMobile ? "1.2em" : "1.5em"}
+        // Enhanced wave effect settings for menu items
+        waveEffect={true}
+        waveAmplitude={isMobile ? 1.0 : 0.7} // More pronounced wave for mobile menu
+        duration={isMobile ? 0.5 : 0.4} // Slightly slower for mobile menu
+        stagger={isMobile ? 0.02 : 0.015} // Adjust stagger based on context
+      />
     </RouterLink>
   );
 };

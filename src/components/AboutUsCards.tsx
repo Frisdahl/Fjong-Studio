@@ -3,7 +3,7 @@ import { VStack, Text, HStack, Image, Box, Link } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { Divider } from "@chakra-ui/react";
 import AlexanderPortrait from "../assets/images/alexander-portrait.jpg";
-import ArrowIcon from "../assets/arrow.svg";
+import ArrowIcon from "../assets/svg/arrow.svg";
 
 const MotionImage = motion(Image);
 

@@ -5,7 +5,7 @@ import Test from "../assets/images/test.webp";
 import VisualAtelier from "../assets/images/Visuel Atelier.webp";
 import VisualAtelier2 from "../assets/images/Visuel Atelier2.webp";
 import BangOlufsen from "../assets/images/iPhone 16 Pro.jpg";
-import ArrowIcon from "../assets/arrow.svg";
+import ArrowIcon from "../assets/svg/arrow.svg";
 
 // Create motion components
 const MotionCenter = motion(Center);
