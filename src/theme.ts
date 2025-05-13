@@ -52,6 +52,14 @@ const fontWeights = {
   extralight: 200, // Match the font-weight from your @font-face declaration
 };
 
+const breakpoints = {
+  sm: "30em", // 480px
+  md: "48em", // 768px
+  lg: "62em", // 992px
+  xl: "80em", // 1280px
+  "2xl": "94em", // 1504px (custom breakpoint for screens over 1500px)
+};
+
 // Keep your existing fonts
 const fonts = {
   heading: "'Clash Display', sans-serif !important",
@@ -64,38 +72,37 @@ const fonts = {
 // Define text styles for typography
 const textStyles = {
   h1: {
-    // Remove the nested responsive objects (md, lg, xl)
-    fontSize: ["2.75rem", "3rem", "4rem", "5rem", "7.875rem"],
+    fontSize: ["2.75rem", "3rem", "4rem", "7.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "extra-light",
     lineHeight: "110%",
     letterSpacing: "-0.02em",
   },
   h2: {
-    fontSize: ["2rem", "3rem", "5.625rem"],
+    fontSize: ["2rem", "3rem", "5.625rem"], // sm, md, lg
     fontWeight: "semibold",
     lineHeight: "110%",
   },
   h3: {
-    fontSize: ["1.75rem", "1.75rem", "3.75rem"],
+    fontSize: ["1.75rem", "1.75rem", "3.75rem"], // sm, md, lg
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h4: {
-    fontSize: ["1.75rem", "1.75rem", "1.75rem"],
+    fontSize: ["1.75rem", "1.75rem", "1.75rem"], // sm, md, lg
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h5: {
-    fontSize: ["1.5rem", "1.5rem", "1.5rem"],
+    fontSize: ["1.5rem", "1.5rem", "1.5rem"], // sm, md, lg
     fontWeight: "semibold",
     lineHeight: "110%",
   },
   links: {
-    fontSize: ["1.125rem", "1.125rem", "1.25rem"],
+    fontSize: ["1.125rem", "1.125rem", "1.25rem"], // sm, md, lg
     fontWeight: "medium",
   },
   text: {
-    fontSize: ["1rem", "1.125rem", "1.25rem"],
+    fontSize: ["1rem", "1.125rem", "1.25rem"], // sm, md, lg
     fontWeight: "extralight",
   },
   // Add more as needed
@@ -119,6 +126,7 @@ const theme = extendTheme({
   fonts,
   textStyles,
   fontWeights,
+  breakpoints,
   radii,
   // You can also customize component-specific styles
   components: {

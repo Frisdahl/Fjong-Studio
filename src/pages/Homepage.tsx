@@ -65,8 +65,13 @@ function Homepage() {
                 textStyle="h1"
                 fontFamily="Clash Display"
                 color="font.dark"
-                lineHeight={{ base: "1.1", md: "1.2" }}
-                display="inline"
+                fontSize={{
+                  base: "2rem", // Small screens
+                  md: "3rem", // Medium screens
+                  lg: "4rem", // Large screens
+                  xl: "6rem", // Extra-large screens
+                  "2xl": "7.875rem", // Screens wider than 1500px
+                }}
                 whiteSpace="normal"
                 width="auto"
                 marginRight="10px"
