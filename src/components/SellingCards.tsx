@@ -35,6 +35,7 @@ function SellingCards({ cardIndex = 0 }: SellingCardsProps) {
       width="100%"
       padding="50px 0px"
       display="flex"
+      alignItems={"center"}
       flexDirection={{ base: "column", md: "row" }}
       gap={{ base: "25px", md: "50px" }}
     >
@@ -50,6 +51,7 @@ function SellingCards({ cardIndex = 0 }: SellingCardsProps) {
         flexDirection="column"
         alignItems="flex-start"
         width={{ base: "100%", md: "70%" }}
+        gap={"15px"}
       >
         <Text as="h3" textStyle="h3">
           {card.title}

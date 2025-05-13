@@ -260,13 +260,17 @@ function Homepage() {
             </Text>
           </HStack>
         </HStack>
-        <Grid templateColumns="repeat(2, 1fr)" gap={"50px"} width="100%">
+        <Grid
+          templateColumns="repeat(2, 1fr)"
+          gap={"50px"}
+          width="100%"
+          mt={"100px"}
+        >
           <GridItem
             width={"100%"}
             bg={"accent.blue"}
             borderRadius={"50px"}
             height={"100%"}
-            maxHeight={"500px"}
           >
             <ProjectCards cardIndex={0} />
           </GridItem>
@@ -278,10 +282,20 @@ function Homepage() {
           >
             <ProjectCards cardIndex={1} />
           </GridItem>
-          <GridItem width={"100%"}>
+          <GridItem
+            width={"100%"}
+            bg={"gray.mid"}
+            borderRadius={"50px"}
+            height={"100%"}
+          >
             <ProjectCards cardIndex={2} />
           </GridItem>
-          <GridItem width={"100%"}>
+          <GridItem
+            width={"100%"}
+            bg={"gray.light"}
+            borderRadius={"50px"}
+            height={"100%"}
+          >
             <ProjectCards cardIndex={3} />
           </GridItem>
         </Grid>
