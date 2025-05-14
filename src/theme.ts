@@ -63,10 +63,9 @@ const breakpoints = {
 // Keep your existing fonts
 const fonts = {
   heading: "'Clash Display', sans-serif !important",
-  body: "'Clash Display', sans-serif !important",
-  mono: "Menlo, monospace",
-  extralight: "ClashDisplay-Extralight, sans-serif !important",
+  regular: "'Clash Display', sans-serif !important",
   light: "ClashDisplay-Light, sans-serif !important",
+  extralight: "ClashDisplay-Extralight, sans-serif !important",
 };
 
 // Define text styles for typography
@@ -75,35 +74,35 @@ const textStyles = {
     fontSize: ["2.75rem", "3rem", "4rem", "7.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "extra-light",
     letterSpacing: "-0.02em",
-    lineHeight: "0.9", // Added this line - value between 0.9-1.0 for tight headings
+    lineHeight: "0.7", // Added this line - value between 0.9-1.0 for tight headings
   },
   h2: {
-    fontSize: ["2rem", "3rem", "5.625rem"], // sm, md, lg
+    fontSize: ["2rem", "3rem", "5.625rem", "6.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "semibold",
-    lineHeight: "110%",
+    lineHeight: "0.8",
   },
   h3: {
-    fontSize: ["1.75rem", "1.75rem", "3.75rem"], // sm, md, lg
+    fontSize: ["1.75rem", "1.75rem", "3.75rem", "4.75rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h4: {
-    fontSize: ["1.75rem", "1.75rem", "2.75rem"], // sm, md, lg
+    fontSize: ["1.75rem", "1.75rem", "2.75rem", "3.25rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h5: {
-    fontSize: ["1.5rem", "1.5rem", "1.5rem"], // sm, md, lg
+    fontSize: ["1.5rem", "1.5rem", "1.5rem", "1.75rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
   links: {
-    fontSize: ["1.125rem", "1.125rem", "1.25rem"], // sm, md, lg
+    fontSize: ["1.125rem", "1.125rem", "1.25rem"], // sm, md, lg, xl, 2xl
     fontWeight: "medium",
   },
   text: {
-    fontSize: ["1rem", "1.125rem", "1.25rem"], // sm, md, lg
-    fontWeight: "extralight",
+    fontSize: ["1rem", "1.125rem", "1.25rem"], // sm, md, lg, xl, 2xl
+    fontWeight: "light",
   },
   // Add more as needed
 };

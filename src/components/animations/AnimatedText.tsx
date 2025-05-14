@@ -3,10 +3,11 @@ import { Box } from "@chakra-ui/react";
 import type { TextProps } from "@chakra-ui/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 
-// Register ScrollTrigger plugin
+// Register GSAP plugins
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, SplitText);
 }
 
 const DURATION = 0.35;
@@ -47,8 +48,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   isInverted = false,
   duration = DURATION,
   stagger = STAGGER,
-  height = "1.5em", // Increased for better handling of descenders
-  lineHeight = "1.1", // Reduced for tighter text
+  height = "1.5em",
+  lineHeight = "1.1",
   waveEffect = true,
   waveAmplitude = WAVE_AMPLITUDE,
   ease = "power2.out",
@@ -61,8 +62,16 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   scrollSnap = false,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const topCharsRef = useRef<HTMLSpanElement[]>([]);
-  const bottomCharsRef = useRef<HTMLSpanElement[]>([]);
+  const textRef = useRef<HTMLDivElement>(null);
+  const textBottomRef = useRef<HTMLDivElement>(null);
+  const splitInstance = useRef<{
+    top: SplitText | null;
+    bottom: SplitText | null;
+  }>({
+    top: null,
+    bottom: null,
+  });
+
   const [isHovered, setIsHovered] = React.useState(false);
   const [animation, setAnimation] = React.useState<gsap.core.Timeline | null>(
     null
@@ -85,9 +94,10 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     return stagger * index * (1 + wavePosition);
   };
 
-  // Create and configure timeline
+  // Create and configure animation
   useEffect(() => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !textRef.current || !textBottomRef.current)
+      return;
 
     // Clear any existing animation
     if (animation) {
@@ -97,9 +107,34 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       }
     }
 
+    // Clear existing SplitText instances
+    if (splitInstance.current.top) {
+      splitInstance.current.top.revert();
+      splitInstance.current.top = null;
+    }
+
+    if (splitInstance.current.bottom) {
+      splitInstance.current.bottom.revert();
+      splitInstance.current.bottom = null;
+    }
+
+    // Create new SplitText instances
+    splitInstance.current.top = new SplitText(textRef.current, {
+      type: "chars",
+      charsClass: "top-char",
+    });
+
+    splitInstance.current.bottom = new SplitText(textBottomRef.current, {
+      type: "chars",
+      charsClass: "bottom-char",
+    });
+
+    const topChars = splitInstance.current.top.chars;
+    const bottomChars = splitInstance.current.bottom.chars;
+
     // Create timeline with optional ScrollTrigger
     const tl = gsap.timeline({
-      paused: !useScrollTrigger, // Only pause if we're not using scroll trigger
+      paused: !useScrollTrigger,
       scrollTrigger: useScrollTrigger
         ? {
             trigger: containerRef.current,
@@ -109,26 +144,27 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             scrub: scrollScrub,
             snap: scrollSnap
               ? {
-                  snapTo: "labels", // Changed from "labelled" to "labels" which is the correct value
+                  snapTo: "labels",
                   duration: { min: 0.2, max: 1.5 },
                   delay: 0.1,
                   ease: "power1.inOut",
                 }
-              : undefined, // Changed from false to undefined
+              : undefined,
             toggleActions: "play none none reverse",
           }
         : undefined,
     });
+
     // Add animation sequence with labels
     tl.addLabel("start");
 
-    // Initial setup for character positions
-    gsap.set(topCharsRef.current, { y: 0 });
-    gsap.set(bottomCharsRef.current, { y: "100%" });
+    // Initial setup
+    gsap.set(topChars, { y: 0 });
+    gsap.set(bottomChars, { y: "100%" });
 
     // Add wave animation for each character
-    topCharsRef.current.forEach((char, i) => {
-      const charDelay = getWaveDelay(i, text.length);
+    topChars.forEach((char, i) => {
+      const charDelay = getWaveDelay(i, topChars.length);
 
       tl.to(
         char,
@@ -142,7 +178,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       );
 
       tl.to(
-        bottomCharsRef.current[i],
+        bottomChars[i],
         {
           y: useScrollTrigger ? 0 : isHovered ? 0 : "100%",
           duration,
@@ -169,6 +205,14 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
         tl.scrollTrigger.kill();
       }
       tl.kill();
+
+      // Revert SplitText instances
+      if (splitInstance.current.top) {
+        splitInstance.current.top.revert();
+      }
+      if (splitInstance.current.bottom) {
+        splitInstance.current.bottom.revert();
+      }
     };
   }, [
     text,
@@ -186,49 +230,6 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     scrollSnap,
   ]);
 
-  // Render character spans with consistent styling
-  const renderCharacters = (
-    refs: React.MutableRefObject<HTMLSpanElement[]>,
-    keyPrefix: string
-  ) =>
-    text.split("").map((char, i) => {
-      // Check for descender characters
-      const hasDescender = /[gjpqy]/.test(char);
-
-      return (
-        <Box
-          key={`${keyPrefix}-${i}`}
-          as="span"
-          display="inline-block"
-          position="relative"
-          overflow="visible" // Changed from "hidden" to "visible" to allow descenders to show
-          lineHeight={lineHeight}
-          paddingBottom={hasDescender ? "0.15em" : "0"} // Add padding for descenders
-          verticalAlign="baseline" // Keep at baseline alignment
-          sx={{
-            // Ensure no shifting during animation
-            transform: "translateZ(0)",
-            willChange: "transform",
-          }}
-        >
-          <span
-            ref={(el) => {
-              if (el) refs.current[i] = el;
-            }}
-            style={{
-              display: "inline-block",
-              position: "relative",
-              lineHeight,
-              // Prevent any default browser adjustments
-              textRendering: "geometricPrecision",
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </span>
-        </Box>
-      );
-    });
-
   return (
     <Box
       ref={containerRef}
@@ -245,12 +246,40 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       onMouseEnter={() => !useScrollTrigger && setIsHovered(true)}
       onMouseLeave={() => !useScrollTrigger && setIsHovered(false)}
       cursor={!useScrollTrigger ? "pointer" : "default"}
+      sx={{
+        ".top-char, .bottom-char": {
+          display: "inline-block",
+          position: "relative",
+          lineHeight: lineHeight,
+          textRendering: "geometricPrecision",
+          willChange: "transform",
+          transform: "translateZ(0)",
+        },
+        // Special handling for characters with descenders
+        ".top-char:has(:is(g, j, p, q, y)), .bottom-char:has(:is(g, j, p, q, y))":
+          {
+            paddingBottom: "0.15em",
+          },
+      }}
     >
-      <Box width="100%" textAlign={textAlign} position="relative">
-        {renderCharacters(topCharsRef, "top")}
+      <Box
+        ref={textRef}
+        width="100%"
+        textAlign={textAlign}
+        position="relative"
+        className="split-top"
+      >
+        {text}
       </Box>
-      <Box position="absolute" inset="0" width="100%" textAlign={textAlign}>
-        {renderCharacters(bottomCharsRef, "bottom")}
+      <Box
+        ref={textBottomRef}
+        position="absolute"
+        inset="0"
+        width="100%"
+        textAlign={textAlign}
+        className="split-bottom"
+      >
+        {text}
       </Box>
     </Box>
   );
