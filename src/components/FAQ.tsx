@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useLayoutEffect, useState } from "react";
 import {
   HStack,
   VStack,
@@ -63,7 +63,7 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
         as="span"
         position="absolute"
         width="100%"
-        height="1px" // Slightly thicker line
+        height="2px" // Slightly thicker line
         bg="gray.600"
       />
 
@@ -72,12 +72,12 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
         initial={{ scaleY: 1 }}
         animate={{ scaleY: isOpen ? 0 : 1 }}
         transition={{
-          duration: 0.7,
+          duration: 0.4,
           ease: "easeInOut",
         }}
         style={{
           position: "absolute",
-          width: "1px", // Slightly thicker line
+          width: "2px", // Slightly thicker line
           height: iconSize, // Match the box height
           backgroundColor: "var(--chakra-colors-gray-600)",
           transformOrigin: "center",
@@ -91,20 +91,23 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
 const FAQItem: React.FC<{
   item: { question: string; answer: string };
   index: number;
-}> = ({ item, index }) => {
+  indexWidth: number;
+}> = ({ item, index, indexWidth }) => {
   const { isOpen, onToggle } = useDisclosure();
+  console.log(indexWidth);
 
   return (
     <Box borderBottom="1px solid" borderColor="gray.200" position="relative">
       <Box
+        pr={"75px"}
         as="button"
         onClick={onToggle}
         width="100%"
         textAlign="left"
         borderRadius="md"
-        p={2}
         position="relative"
         zIndex="1"
+        overflow="hidden"
         _before={{
           content: '""',
           position: "absolute",
@@ -114,7 +117,8 @@ const FAQItem: React.FC<{
           bottom: "50%",
           bg: "gray.50",
           zIndex: "-1",
-          transition: "top 0.5s ease, bottom 0.5s ease",
+          transition:
+            "top 0.4s cubic-bezier(0.4,0,0.2,1), bottom 0.4s cubic-bezier(0.4,0,0.2,1)",
           borderRadius: "md",
         }}
         _hover={{
@@ -123,23 +127,37 @@ const FAQItem: React.FC<{
             bottom: 0,
           },
         }}
+        transition="background 0.4s cubic-bezier(0.4,0,0.2,1)"
       >
         <Flex justify="space-between" align="center">
-          <HStack p={"25px 0px 25px 0px"}>
-            <Text
-              textStyle="h5"
-              color="gray.500"
-              // Remove fontSize and fontWeight to allow textStyle to work
+          <HStack p={"25px 0px 25px 75px"} gap={0}>
+            <motion.span
+              style={{
+                display: "inline-block",
+                width: "3rem",
+                textAlign: "right",
+              }}
+              initial={false}
+              animate={{ color: "#718096" }}
+              transition={{ duration: 0.3 }}
             >
-              {index < 9 ? `0${index + 1}` : index + 1}.
-            </Text>
-            <Text
-              textStyle="h5"
-              pl={"35px"}
-              // Only override fontWeight but keep other h5 styles
+              <Text textStyle="h5" color="inherit" as="span">
+                {index < 9 ? `0${index + 1}` : index + 1}.
+              </Text>
+            </motion.span>
+            <motion.span
+              style={{
+                display: "inline-block",
+                paddingLeft: `${indexWidth}px`,
+              }}
+              initial={false}
+              animate={{ color: "#2D3748" }}
+              transition={{ duration: 0.3 }}
             >
-              {item.question}
-            </Text>
+              <Text textStyle="h5" color="inherit" pl={"2rem"}>
+                {item.question}
+              </Text>
+            </motion.span>
           </HStack>
           <AnimatedIcon isOpen={isOpen} />
         </Flex>
@@ -152,7 +170,14 @@ const FAQItem: React.FC<{
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
-            <Box pt={4} pl={70} pr={10} pb={2} maxW={"80%"}>
+            {/* The answer needs to align with the question text, not the index */}
+            {/* So we need: HStack padding + index width + question padding */}
+            <Box
+              pl={`calc(75px + ${indexWidth}px + 3rem + 2rem)`}
+              pr={10}
+              pb={2}
+              maxW={"80%"}
+            >
               <Text color="gray.600">{item.answer}</Text>
             </Box>
           </motion.div>
@@ -163,11 +188,29 @@ const FAQItem: React.FC<{
 };
 
 function FAQ() {
+  // Add state for index width
+  const [indexWidth, setIndexWidth] = useState(0);
+  const measureRef = useRef<HTMLSpanElement>(null);
+
+  // Measure the width of "02." once on mount
+  useLayoutEffect(() => {
+    if (measureRef.current) {
+      setIndexWidth(measureRef.current.offsetWidth);
+    }
+  }, []);
+
   return (
     <VStack spacing={0} align="stretch" width="100%" mx="auto" my={10}>
+      {/* Hidden element to measure the index width */}
+
       <Box borderTop="1px solid" borderColor="gray.200">
         {questions.index.map((item, index) => (
-          <FAQItem key={index} item={item} index={index} />
+          <FAQItem
+            key={index}
+            item={item}
+            index={index}
+            indexWidth={indexWidth}
+          />
         ))}
       </Box>
     </VStack>

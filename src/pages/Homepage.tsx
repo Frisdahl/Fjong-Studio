@@ -17,7 +17,6 @@ import { Divider } from "@chakra-ui/react";
 import logo from "../assets/svg/logo.svg";
 import AboutUsCards from "../components/AboutUsCards";
 import FAQ from "../components/FAQ";
-import AnimatedText from "../components/animations/AnimatedText";
 import {
   ScrollRevealText,
   ScrollRevealContent,
@@ -303,13 +302,14 @@ function Homepage() {
           alignItems={"flex-start"}
           marginTop={{ base: "50px", md: "150px", lg: "150px" }}
         >
-          <HStack
+          <VStack
             flexDirection={"column"}
             alignItems={"flex-start"}
-            mb={"3.75rem"}
+            gap={".5rem"}
+            mb={"2.5rem"}
           >
             <Text
-              as={"h5"}
+              as={"text"}
               textStyle={"h5"}
               fontFamily="ClashDisplay-extraLight"
             >
@@ -342,7 +342,7 @@ function Homepage() {
                 applikationer
               </ScrollRevealText>
             </Text>
-          </HStack>
+          </VStack>
           <Divider borderColor="1a1a1a" border={"1px solid"} />
           <SellingCards cardIndex={0} />
           <Divider borderColor="1a1a1a" border={"1px solid"} />
@@ -368,10 +368,14 @@ function Homepage() {
           justifyContent={"space-between"}
           alignItems={"flex-end"}
         >
-          <HStack flexDirection={"column"} alignItems={"flex-start"}>
+          <VStack
+            flexDirection={"column"}
+            alignItems={"flex-start"}
+            gap={".5rem"}
+          >
             <Text
               as={"text"}
-              textStyle={"text"}
+              textStyle={"h5"}
               fontFamily="ClashDisplay-extraLight"
             >
               Check ud
@@ -383,7 +387,7 @@ function Homepage() {
             >
               vores <br></br> portfolio
             </Text>
-          </HStack>
+          </VStack>
 
           <HStack flexDirection={"column"} alignItems={"flex-end"}>
             <Image src={logo} alt="Portfolio" objectFit="cover" />
@@ -450,7 +454,7 @@ function Homepage() {
         <VStack alignItems={"flex-start"}>
           <Text
             as={"text"}
-            textStyle={"text"}
+            textStyle={"h5"}
             fontFamily="ClashDisplay-extraLight"
           >
             vi er
@@ -466,23 +470,24 @@ function Homepage() {
         </Grid>
       </VStack>
 
-      <VStack
-        alignItems={"flex-start"}
-        width={"100%"}
-        padding={"150px 75px"}
-        id="ydelser"
-      >
-        <VStack alignItems={"flex-start"}>
-          <Text
-            as={"text"}
-            textStyle={"text"}
-            fontFamily="ClashDisplay-extraLight"
-          >
-            se vores
-          </Text>
-          <Text as={"h2"} textStyle={"h2"} fontFamily="ClashDisplay-extraLight">
-            Ofte stillede spørgsmål
-          </Text>
+      <VStack alignItems={"flex-start"} width={"100%"} id="ydelser">
+        <VStack alignItems={"flex-start"} gap={".5rem"}>
+          <VStack alignItems={"flex-start"} pl={"75px"} gap={".5rem"}>
+            <Text
+              as={"text"}
+              textStyle={"h5"}
+              fontFamily="ClashDisplay-extraLight"
+            >
+              se vores
+            </Text>
+            <Text
+              as={"h2"}
+              textStyle={"h2"}
+              fontFamily="ClashDisplay-extraLight"
+            >
+              Ofte stillede spørgsmål
+            </Text>
+          </VStack>
         </VStack>
         <VStack width={"100%"}>
           <FAQ />
@@ -492,20 +497,12 @@ function Homepage() {
             fontWeight={"regular"}
             _hover={{ bg: "font.dark" }}
             borderRadius={"50px"}
-            py={5}
-            px={8}
+            p={"15px 35px"}
             height="auto"
             position="relative"
             overflow="hidden"
           >
-            <AnimatedText
-              text="Se alle spørgsmål"
-              isInverted={true}
-              height="1.5em"
-              fontSize="1rem"
-              fontWeight="regular"
-              color="white.cream"
-            />
+            se alle spørgsmål
           </Button>
         </VStack>
       </VStack>
