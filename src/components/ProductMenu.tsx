@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  Image,
   VStack,
   HStack,
   Button,
@@ -8,6 +9,8 @@ import {
   Grid,
   GridItem,
 } from "@chakra-ui/react";
+import AnimatedElement from "./animations/AnimatedElement";
+import fireIcon from "../assets/svg/fire-icon.svg"; // Import the fire icon
 
 // Define a type for valid tab names
 type TabName = "startpakke" | "virksomhed" | "propakke";
@@ -15,6 +18,7 @@ type TabName = "startpakke" | "virksomhed" | "propakke";
 export default function ProductMenu() {
   // Specify the state type
   const [activeTab, setActiveTab] = useState<TabName>("startpakke");
+  const [previousTab, setPreviousTab] = useState<TabName>("startpakke"); // Add this state
 
   const featureStartDescriptionMap: Record<string, string> = {
     Landingsprototype: "En klikbar model af din side til hurtig afprøvning.",
@@ -129,101 +133,123 @@ export default function ProductMenu() {
     },
   };
 
-  // Helper function to get the correct description based on active tab
-  const getFeatureDescription = (feature: string): string => {
-    // If the feature has a description in the appropriate tab's map, use it
-    if (activeTab === "propakke" && featureProDescriptionMap[feature]) {
+  function getFeatureDescription(feature: string) {
+    // This function returns the correct description for a feature
+    // based on the active tab and the feature name.
+    // It uses the feature description maps defined above.
+
+    if (featureStartDescriptionMap[feature]) {
+      return featureStartDescriptionMap[feature];
+    } else if (featureVirksomhedDescriptionMap[feature]) {
+      return featureVirksomhedDescriptionMap[feature];
+    } else if (featureProDescriptionMap[feature]) {
       return featureProDescriptionMap[feature];
     }
 
-    if (
-      (activeTab === "propakke" || activeTab === "virksomhed") &&
-      featureVirksomhedDescriptionMap[feature]
-    ) {
-      return featureVirksomhedDescriptionMap[feature];
-    }
-
-    // Default to the startpakke description for any tab
-    if (featureStartDescriptionMap[feature]) {
-      return featureStartDescriptionMap[feature];
-    }
-
-    // Fallback if no description exists
     return "";
+  }
+
+  // Example button click handler
+  const handleTabChange = (newTab: TabName) => {
+    setPreviousTab(activeTab);
+    setActiveTab(newTab);
   };
 
   return (
-    <VStack spacing={8} align="stretch" width="100%">
+    <VStack
+      p={{ base: "1rem", md: "1.5rem", lg: "2rem" }}
+      align="stretch"
+      width="100%"
+      bg={"white.cream"}
+      borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
+    >
       {/* Horizontal Menu */}
       <HStack
+        flexDirection={{ base: "column", md: "row" }}
         justify="space-between"
-        border={"1px solid"}
-        borderColor={"font.dark"}
+        borderColor="font.dark"
         borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
         maxW={{ base: "100%", md: "80%", lg: "80%", xl: "50%" }}
-        overflow={"hidden"}
+        overflow="hidden"
+        boxShadow="0px 4px 16px rgba(26, 26, 26, 0.10)" // softer, larger shadow
+        p="0.25rem"
       >
         <Button
           fontSize={{ base: "1.25rem", md: "1.25rem", lg: "1.25rem" }}
-          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }} // padding top & bottom
-          px={{ base: "2rem", md: "2rem", lg: "2rem" }} // padding left & right
-          width={"100%"}
-          onClick={() => setActiveTab("startpakke")}
+          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }}
+          px={{ base: "2rem", md: "2rem", lg: "2rem" }}
+          width="100%"
+          onClick={() => handleTabChange("startpakke")}
           bg={activeTab === "startpakke" ? "accent.blue" : "transparent"}
           color={activeTab === "startpakke" ? "white" : "gray.800"}
           _hover={
             activeTab === "startpakke"
-              ? { bg: "font.dark", opacity: 0.9 }
-              : { bg: "transparent" }
+              ? { bg: "font.dark", opacity: 0.95 }
+              : { bg: "gray.100" }
           }
-          borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
+          borderRadius="40px"
           fontWeight={activeTab === "startpakke" ? "medium" : "regular"}
+          transition="background 0.2s, color 0.2s"
+          boxShadow={
+            activeTab === "startpakke"
+              ? "0 2px 8px 0 rgba(26, 26, 26, 0.10)"
+              : "none"
+          }
         >
           Start Pakke
         </Button>
         <Button
           fontSize={{ base: "1.25rem", md: "1.25rem", lg: "1.25rem" }}
-          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }} // padding top & bottom
-          px={{ base: "2rem", md: "2rem", lg: "2rem" }} // padding left & right
-          width={"100%"}
-          onClick={() => setActiveTab("virksomhed")}
+          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }}
+          px={{ base: "2rem", md: "2rem", lg: "2rem" }}
+          width="100%"
+          onClick={() => handleTabChange("virksomhed")}
           bg={activeTab === "virksomhed" ? "accent.blue" : "transparent"}
           color={activeTab === "virksomhed" ? "white" : "gray.800"}
-          borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
-          borderLeftColor="font.dark"
+          borderRadius="40px"
           _hover={
             activeTab === "virksomhed"
-              ? { bg: "font.dark", opacity: 0.9 }
-              : { bg: "transparent" }
+              ? { bg: "font.dark", opacity: 0.95 }
+              : { bg: "gray.100" }
           }
           fontWeight={activeTab === "virksomhed" ? "medium" : "regular"}
+          transition="background 0.2s, color 0.2s"
           boxShadow={
-            activeTab === "startpakke"
-              ? "2px 0 3px 0 rgba(26, 26, 26, 0.15)"
-              : activeTab === "propakke"
-              ? "-2px 0 3px 0 rgba(26, 26, 26, 0.15)" // stronger shadow for propakke
-              : "-1px 0 2px 0 rgba(26, 26, 26, 0.1)" // default shadow for virksomhed
+            activeTab === "virksomhed"
+              ? "0 2px 8px 0 rgba(26, 26, 26, 0.10)"
+              : "none"
           }
         >
           Virksomhed
         </Button>
         <Button
           fontSize={{ base: "1.25rem", md: "1.25rem", lg: "1.25rem" }}
-          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }} // padding top & bottom
-          px={{ base: "2rem", md: "2rem", lg: "2rem" }} // padding left & right
-          width={"100%"}
-          _hover={
-            activeTab === "propakke"
-              ? { bg: "font.dark", opacity: 0.9 }
-              : { bg: "transparent" }
-          }
-          onClick={() => setActiveTab("propakke")}
+          py={{ base: "2rem", md: "2rem", lg: "1.5rem" }}
+          px={{ base: "2rem", md: "2rem", lg: "2rem" }}
+          width="100%"
+          gap="10px"
+          onClick={() => handleTabChange("propakke")}
           bg={activeTab === "propakke" ? "accent.blue" : "transparent"}
           color={activeTab === "propakke" ? "white" : "gray.800"}
-          borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
+          borderRadius="40px"
           fontWeight={activeTab === "propakke" ? "medium" : "regular"}
+          _hover={
+            activeTab === "propakke"
+              ? { bg: "font.dark", opacity: 0.95 }
+              : { bg: "gray.100" }
+          }
+          transition="background 0.2s, color 0.2s"
+          boxShadow={
+            activeTab === "propakke"
+              ? "0 2px 8px 0 rgba(26, 26, 26, 0.10)"
+              : "none"
+          }
         >
           Pro Pakke
+          <Image
+            src={fireIcon}
+            boxSize={{ base: "1.5rem", md: "1.5rem", xl: "1.5rem" }}
+          />
         </Button>
       </HStack>
 
@@ -237,10 +263,9 @@ export default function ProductMenu() {
           mb={{ base: "1rem", md: "1.5rem", lg: "2rem" }}
           align="flex-start"
         >
-          <Text fontSize="2xl" fontWeight="bold" mb={2}>
-            {menuContent[activeTab].title} - {menuContent[activeTab].price}
+          <Text textStyle={"h5"} fontWeight="medium" mb={2}>
+            {menuContent[activeTab].title}{" "}
           </Text>
-
           <Text mb={4}>{menuContent[activeTab].description}</Text>
         </VStack>
 
@@ -253,45 +278,58 @@ export default function ProductMenu() {
             }}
             gap={{ base: "1rem", md: "2rem" }}
           >
-            {activeTab === "startpakke" &&
-              menuContent["startpakke"].features.map(
-                (feature: string, index: number) => (
-                  <GridItem key={index}>
+            {menuContent[activeTab].features.map(
+              (feature: string, index: number) => {
+                // Check if this feature is new in the current tab (not in previous tabs)
+                const isInStartPakke =
+                  menuContent["startpakke"].features.includes(feature);
+                const isInVirksomhed =
+                  menuContent["virksomhed"].features.includes(feature);
+
+                // Determine if feature should be animated based on current tab
+                const shouldAnimate =
+                  (activeTab === "virksomhed" && !isInStartPakke) ||
+                  (activeTab === "propakke" &&
+                    previousTab === "startpakke" &&
+                    !isInStartPakke) ||
+                  (activeTab === "propakke" &&
+                    previousTab === "virksomhed" &&
+                    !isInVirksomhed);
+
+                // Get the right description for this feature
+                const description = getFeatureDescription(feature);
+
+                return (
+                  <GridItem key={`${activeTab}-${feature}-${index}`}>
                     <VStack align="flex-start" spacing={1}>
-                      <Text fontWeight="medium">{feature}</Text>
-                      <Text fontSize="sm" color="gray.600">
-                        {getFeatureDescription(feature)}
-                      </Text>
+                      {shouldAnimate ? (
+                        // Animate both feature name and description for new features
+                        <AnimatedElement
+                          animationType="fade-up"
+                          duration={0.4}
+                          delay={index * 0.05}
+                        >
+                          <VStack align="flex-start" spacing={1} width="100%">
+                            <Text fontWeight="medium">{feature}</Text>
+                            <Text fontSize="sm" color="gray.600">
+                              {description}
+                            </Text>
+                          </VStack>
+                        </AnimatedElement>
+                      ) : (
+                        // No animation for existing features
+                        <>
+                          <Text fontWeight="medium">{feature}</Text>
+                          <Text fontSize="sm" color="gray.600">
+                            {description}
+                          </Text>
+                        </>
+                      )}
                     </VStack>
                   </GridItem>
-                )
-              )}
-            {activeTab === "virksomhed" &&
-              menuContent["virksomhed"].features.map(
-                (feature: string, index: number) => (
-                  <GridItem key={index}>
-                    <VStack align="flex-start" spacing={1}>
-                      <Text fontWeight="medium">{feature}</Text>
-                      <Text fontSize="sm" color="gray.600">
-                        {getFeatureDescription(feature)}
-                      </Text>
-                    </VStack>
-                  </GridItem>
-                )
-              )}
-            {activeTab === "propakke" &&
-              menuContent["propakke"].features.map(
-                (feature: string, index: number) => (
-                  <GridItem key={index}>
-                    <VStack align="flex-start" spacing={1}>
-                      <Text fontWeight="medium">{feature}</Text>
-                      <Text fontSize="sm" color="gray.600">
-                        {getFeatureDescription(feature)}
-                      </Text>
-                    </VStack>
-                  </GridItem>
-                )
-              )}
+                );
+              }
+            )}
           </Grid>
         </Box>
       </Box>

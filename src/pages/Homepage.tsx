@@ -458,14 +458,7 @@ function Homepage() {
           </Text>
         </VStack>
 
-        <VStack
-          className="Homepage-ProductMenu"
-          boxShadow="0px 2px 4px rgba(26, 26, 26, 0.08)"
-          width={"100%"}
-          borderRadius={{ base: "15px", md: "15px", lg: "15px" }}
-        >
-          <ProductMenu />
-        </VStack>
+        <ProductMenu />
       </VStack>
 
       <VStack
