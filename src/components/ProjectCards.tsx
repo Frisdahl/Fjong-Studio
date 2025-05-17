@@ -80,14 +80,14 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
 
   return (
     <HStack
+      height={"100%"}
       ref={cardRef}
       flexDirection={"column"}
       alignItems={"flex-start"}
       className="project-card"
       gap={"0px"}
-      height={"100%"}
       boxShadow="0px 4px 10px rgba(26, 26, 26, 0.25)"
-      borderRadius="50px"
+      borderRadius={{ base: "25px", md: "50px" }}
       overflow="hidden"
       position="relative"
       onMouseEnter={() => setIsHovered(true)}
@@ -170,11 +170,8 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
       </AnimatePresence>
 
       <Image
-        height={{ base: "200px", md: "75%" }}
-        borderTopLeftRadius={"50px"}
-        borderTopRightRadius={"50px"}
-        borderBottomLeftRadius={"0"}
-        borderBottomRightRadius={"0"}
+        height={{ base: "100%", md: "100%" }}
+        borderRadius={{ base: "15px", md: "50px" }}
         width={"100%"}
         src={
           typeof cardContent[cardIndex].imageSrc === "string"
@@ -188,7 +185,7 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
       <VStack
         justifyContent={"flex-start"}
         alignItems={"flex-start"}
-        padding={"50px 50px"}
+        padding={{ base: "25px", md: "25px", lg: "50px" }}
         width="100%"
       >
         <Text as="h4" textStyle="h4" color={"white.100"}>
@@ -197,8 +194,8 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
         <Text
           as="text"
           textStyle="text"
+          fontSize={{ base: ".75rem", md: "1.125rem", lg: "1.25rem" }}
           color={"white.off"}
-          fontFamily="ClashDisplay-Extralight"
         >
           {cardContent[cardIndex].description}
         </Text>

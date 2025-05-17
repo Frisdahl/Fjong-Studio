@@ -23,6 +23,7 @@ import {
 } from "../components/animations/ScrollAnimation";
 import AnimatedElement from "../components/animations/AnimatedElement";
 import FadeIn from "../components/animations/FadeIn";
+import ProductMenu from "../components/ProductMenu";
 
 function Homepage() {
   // Create a ref for the video element
@@ -54,28 +55,46 @@ function Homepage() {
     return () => clearTimeout(timer);
   }, []);
 
+  const heroTitlePadding = {
+    base: "150px",
+    md: "150px",
+    lg: "100px",
+    xl: "150px",
+  };
+  const sectionSpacing = {
+    base: "5rem",
+    md: "5rem",
+    lg: "7.5rem",
+    xl: "10rem",
+  };
+  const headingSpacing = {
+    base: "1.5rem",
+    md: "2rem",
+    lg: "2.5rem",
+    xl: "5rem",
+  };
+
   return (
     <>
       <HStack
-        className="hero-section"
         flexDirection={"column"}
         alignItems={"flex-start"}
-        padding={{ base: "0px 35px", md: "0px 75px" }}
+        padding={{ base: "35px 35px", md: "50px 50px", xl: "50px 75px" }}
       >
         <Box
-          marginTop={{ base: "35px", md: "100px", lg: "250px" }}
-          height={"calc(80vh - 150px)"}
+          className="hero-section"
+          height={{ base: "calc(100vh - 100px)", xl: "calc(100vh - 100px)" }}
           width="100%"
-          display="flex"
-          flexDirection={{ base: "column", lg: "row" }}
-          alignItems={{ base: "flex-start", lg: "flex-start" }}
-          justifyContent="space-between"
+          display={"flex"}
+          flexDirection={{ base: "column", md: "row" }}
           position={"relative"}
         >
           <VStack
             alignItems={"flex-start"}
+            width={{ base: "100%", lg: "50%", xl: "100%" }}
             maxWidth={{ base: "100%", md: "90%", lg: "100%" }}
             spacing={4}
+            position={"relative"}
             zIndex={"500"}
           >
             {/* Title with play button */}
@@ -88,17 +107,9 @@ function Homepage() {
               <Text
                 as="h1"
                 textStyle="h1"
-                fontFamily="Clash Display"
                 color="font.dark"
-                fontSize={{
-                  base: "2rem",
-                  md: "3rem",
-                  lg: "4rem",
-                  xl: "6rem",
-                  "2xl": "7.875rem",
-                }}
+                pt={heroTitlePadding}
                 whiteSpace="normal"
-                width="auto"
                 marginRight="10px"
               >
                 {/* First line of text */}
@@ -118,6 +129,7 @@ function Homepage() {
                   alignItems="center"
                   display="inline-flex"
                   flexWrap="nowrap"
+                  zIndex={"500"}
                 >
                   <ScrollRevealText
                     animateOnLoad={true}
@@ -160,8 +172,18 @@ function Homepage() {
                         <Image
                           src={playIcon}
                           alt="Play"
-                          width={{ base: "2rem", md: "3.5rem", lg: "5rem" }}
-                          height={{ base: "2rem", md: "3.5rem", lg: "5rem" }}
+                          width={{
+                            base: "2rem",
+                            md: "3rem",
+                            lg: "3.5rem",
+                            xl: "5rem",
+                          }}
+                          height={{
+                            base: "2rem",
+                            md: "3rem",
+                            lg: "3.5rem",
+                            xl: "5rem",
+                          }}
                         />
                       </Button>
                     </FadeIn>
@@ -184,56 +206,46 @@ function Homepage() {
           </VStack>
 
           {/* Video container */}
-          <Box
-            className="homepage-video"
+
+          <AnimatedElement
             position={"absolute"}
-            top={{ base: "20%", md: "0px", lg: "-20%" }}
-            right={{ base: "0%", md: "0px", lg: "2%" }}
-            width={{ base: "100%", md: "50%", lg: "60%" }}
-            maxWidth={{ base: "100%", md: "750px", lg: "1500px" }}
-            mt={{ base: 8, lg: 0 }}
-            borderRadius="md"
-            overflow="hidden"
+            animationType="fade"
+            duration={1.5}
+            delay={1.8}
+            ease="power1.inOut"
+            width="100%"
+            height="100%"
             zIndex={"1"}
           >
-            <AnimatedElement
-              animationType="fade"
-              duration={1.5}
-              delay={1.8}
-              ease="power1.inOut"
-              width="100%"
-              height="100%"
-            >
-              <Box
-                as="video"
-                zIndex={"1"}
-                ref={videoRef}
-                width="100%"
-                height="auto"
-                objectFit="cover"
-                controls={false}
-                autoPlay
-                muted
-                loop
-                playsInline
-                src="/007.mp4"
-                sx={{
-                  mixBlendMode: "multiply", // or try "screen" for light backgrounds
-                }}
-              />
-            </AnimatedElement>
-          </Box>
+            <Box
+              top={{ base: "35%", md: "25%", lg: "0%" }}
+              // Align right on desktop, left on tablet
+              right={{ base: "0%", md: "0%", lg: "75px" }}
+              position={"absolute"}
+              as="video"
+              ref={videoRef}
+              width={{ base: "1500px", md: "100%", lg: "60%" }}
+              height="auto"
+              objectFit="cover"
+              controls={false}
+              autoPlay
+              muted
+              loop
+              playsInline
+              src="/007.mp4"
+            />
+          </AnimatedElement>
 
           <HStack
             zIndex={"100"}
             flexDirection={"column"}
             alignItems={"flex-end"}
             height="100%" // Fill parent height
-            width={{ base: "100%", lg: "auto" }} // Full width on mobile, auto on desktop
+            width={{ base: "100%", lg: "50%", xl: "100%" }} // Full width on mobile, auto on desktop
             justifyContent="space-between" // Create space between children
             alignSelf="stretch" // Stretch to fill container height
           >
-            <Box display={{ base: "none", lg: "block" }} width="100%">
+            <Box display={{ base: "none", lg: "block" }} pt={heroTitlePadding}>
               <VStack align="flex-end" spacing={2} width="100%">
                 <ScrollRevealContent delay={2} duration={1}>
                   <Text fontSize={"1.15em"} textAlign="right" width="100%">
@@ -274,8 +286,8 @@ function Homepage() {
                 <Text
                   as={"h4"}
                   textStyle={"h4"}
-                  fontFamily="ClashDisplay-Light"
-                  fontWeight={"light"}
+                  fontFamily="Clash Display"
+                  fontWeight={400}
                 >
                   20
                   <Text as="span" color="#005CFF" display="inline">
@@ -285,7 +297,7 @@ function Homepage() {
                 <Text
                   as={"text"}
                   textStyle={"text"}
-                  fontFamily="ClashDisplay-Light"
+                  fontFamily="Clash Display"
                   alignSelf={"flex-end"}
                   textAlign="right" // Ensure text alignment is set to right
                 >
@@ -300,28 +312,20 @@ function Homepage() {
           flexDirection={"column"}
           width={"100%"}
           alignItems={"flex-start"}
-          marginTop={{ base: "50px", md: "150px", lg: "150px" }}
+          gap={"0px"}
+          mt={sectionSpacing}
         >
           <VStack
             flexDirection={"column"}
             alignItems={"flex-start"}
-            gap={".5rem"}
-            mb={"2.5rem"}
+            mb={headingSpacing}
           >
-            <Text
-              as={"text"}
-              textStyle={"h5"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+            <Text as={"text"} textStyle={"h5"}>
               <ScrollRevealContent slideUp={true} duration={0.6} delay={0.2}>
                 Mere end bare hjemmesider
               </ScrollRevealContent>
             </Text>
-            <Text
-              as={"h2"}
-              textStyle={"h2"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+            <Text as={"h2"} textStyle={"h2"}>
               <ScrollRevealText
                 duration={1}
                 stagger={0.02}
@@ -355,48 +359,43 @@ function Homepage() {
       <HStack
         ref={portfolioRef}
         flexDirection={"column"}
-        padding={{ base: "150px 35px", md: "150px 75px" }}
+        padding={{ base: "75px 35px", md: "150px 75px" }}
         bg={"accent.sandMed"}
-        borderRadius={"100px"}
+        borderRadius={{ base: "50px", md: "50px", lg: "100px" }}
         width={"100%"}
         alignItems={"flex-start"}
-        marginTop={{ base: "50px", md: "150px", lg: "150px" }}
+        mt={sectionSpacing}
         id="projekter"
       >
         <HStack
           width={"100%"}
           justifyContent={"space-between"}
           alignItems={"flex-end"}
+          mb={headingSpacing}
         >
-          <VStack
-            flexDirection={"column"}
-            alignItems={"flex-start"}
-            gap={".5rem"}
-          >
-            <Text
-              as={"text"}
-              textStyle={"h5"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+          <VStack flexDirection={"column"} alignItems={"flex-start"}>
+            <Text as={"text"} textStyle={"h5"}>
               Check ud
             </Text>
-            <Text
-              as={"h2"}
-              textStyle={"h2"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+            <Text as={"h2"} textStyle={"h2"}>
               vores <br></br> portfolio
             </Text>
           </VStack>
 
           <HStack flexDirection={"column"} alignItems={"flex-end"}>
-            <Image src={logo} alt="Portfolio" objectFit="cover" />
+            <Image
+              src={logo}
+              alt="Portfolio"
+              objectFit="cover"
+              display={{ base: "none", md: "block" }}
+            />
             <Text
               as={"text"}
               textStyle={"text"}
-              fontFamily="ClashDisplay-extraLight"
               maxW={"400px"}
               textAlign={"right"}
+              display={{ base: "none", md: "block" }}
+              width={{ base: "100%", md: "75%", lg: "100%" }}
             >
               Vi har hjulpet mange kunder med deres digitale identitet – her er
               et udvalg af vores arbejde.
@@ -404,40 +403,35 @@ function Homepage() {
           </HStack>
         </HStack>
         <Grid
-          templateColumns="repeat(2, 1fr)"
-          gap={"50px"}
+          templateColumns={{ base: "1fr", md: "1fr 1fr", xl: "repeat(2, 1fr)" }}
+          gap={{ base: "25px", md: "50px", lg: "50px" }}
           width="100%"
-          mt={"100px"}
         >
           <GridItem
             width={"100%"}
             bg={"accent.blue"}
-            borderRadius={"50px"}
-            height={"100%"}
+            borderRadius={{ base: "25px", md: "50px" }}
           >
             <ProjectCards cardIndex={0} />
           </GridItem>
           <GridItem
             width={"100%"}
             bg={"accent.sand"}
-            borderRadius={"50px"}
-            height={"100%"}
+            borderRadius={{ base: "25px", md: "50px" }}
           >
             <ProjectCards cardIndex={1} />
           </GridItem>
           <GridItem
             width={"100%"}
             bg={"gray.mid"}
-            borderRadius={"50px"}
-            height={"100%"}
+            borderRadius={{ base: "25px", md: "50px" }}
           >
             <ProjectCards cardIndex={2} />
           </GridItem>
           <GridItem
             width={"100%"}
             bg={"gray.light"}
-            borderRadius={"50px"}
-            height={"100%"}
+            borderRadius={{ base: "25px", md: "50px" }}
           >
             <ProjectCards cardIndex={3} />
           </GridItem>
@@ -445,46 +439,79 @@ function Homepage() {
       </HStack>
 
       <VStack
-        ref={servicesRef}
+        flexDirection={"column"}
+        mt={sectionSpacing}
         alignItems={"flex-start"}
-        width={"100%"}
-        padding={"150px 75px"}
-        id="ydelser"
+        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
+        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
       >
-        <VStack alignItems={"flex-start"}>
-          <Text
-            as={"text"}
-            textStyle={"h5"}
-            fontFamily="ClashDisplay-extraLight"
-          >
-            vi er
+        <VStack
+          flexDirection={"column"}
+          alignItems={"flex-start"}
+          mb={headingSpacing}
+        >
+          <Text as={"text"} textStyle={"h5"}>
+            Se vores pakker af
           </Text>
-          <Text as={"h2"} textStyle={"h2"} fontFamily="ClashDisplay-extraLight">
-            de kreative
+          <Text as={"h2"} textStyle={"h2"}>
+            hjemmesider
           </Text>
         </VStack>
-        <Grid templateColumns="repeat(2, 1fr)" gap={"50px"} width="100%">
+
+        <VStack
+          className="Homepage-ProductMenu"
+          boxShadow="0px 2px 4px rgba(26, 26, 26, 0.08)"
+          width={"100%"}
+          borderRadius={{ base: "15px", md: "15px", lg: "15px" }}
+        >
+          <ProductMenu />
+        </VStack>
+      </VStack>
+
+      <VStack
+        ref={servicesRef}
+        alignItems={"flex-start"}
+        mt={sectionSpacing}
+        width={"100%"}
+        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
+        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
+        gap={"0px"}
+      >
+        <VStack alignItems={"flex-start"} mb={headingSpacing}>
+          <Text as={"text"} textStyle={"h5"}>
+            Hvem er
+          </Text>
+          <Text as={"h2"} textStyle={"h2"}>
+            Fjong Studio
+          </Text>
+        </VStack>
+        <Grid
+          templateColumns={{ base: "1fr", md: "1fr", lg: "1fr 1fr" }}
+          gap={"50px"}
+          width="100%"
+        >
           <GridItem>
             <AboutUsCards />
           </GridItem>
         </Grid>
       </VStack>
 
-      <VStack alignItems={"flex-start"} width={"100%"} id="ydelser">
+      <VStack
+        alignItems={"flex-start"}
+        width={"100%"}
+        id="ydelser"
+        mt={sectionSpacing}
+      >
         <VStack alignItems={"flex-start"} gap={".5rem"}>
-          <VStack alignItems={"flex-start"} pl={"75px"} gap={".5rem"}>
-            <Text
-              as={"text"}
-              textStyle={"h5"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+          <VStack
+            alignItems={"flex-start"}
+            pl={{ base: "35px", md: " 50px", xl: " 75px" }}
+            pr={{ base: "35px", md: " 50px", xl: " 75px" }}
+          >
+            <Text as={"text"} textStyle={"h5"}>
               se vores
             </Text>
-            <Text
-              as={"h2"}
-              textStyle={"h2"}
-              fontFamily="ClashDisplay-extraLight"
-            >
+            <Text as={"h2"} textStyle={"h2"}>
               Ofte stillede spørgsmål
             </Text>
           </VStack>
@@ -507,7 +534,7 @@ function Homepage() {
         </VStack>
       </VStack>
 
-      <Box ref={contactRef} id="kontakt">
+      <Box ref={contactRef} id="kontakt" mt={sectionSpacing}>
         {/* Footer content */}
       </Box>
     </>

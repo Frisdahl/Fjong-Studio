@@ -1,29 +1,39 @@
 import { VStack, Text, Image, HStack } from "@chakra-ui/react";
 import logo from "../../assets/svg/logo-white.svg";
-import EmailIcon from "../../assets/svg/Mail.svg";
-import PhoneIcon from "../../assets/svg/phone.svg";
-import Instagram from "../../assets/svg/instagram.svg";
-import Facebook from "../../assets/svg/facebook.svg";
-import TikTok from "../../assets/svg/TikTok.svg";
-import LeftSymbols from "../../assets/svg/leftSymbols.svg";
-import AndSymbol from "../../assets/svg/andSymbol.svg";
-import CurlyBrackets from "../../assets/svg/curlyBrackets.svg";
-import ArrowUp from "../../assets/svg/ArrowUp.svg";
-import Star from "../../assets/svg/Star.svg";
+import EmailIcon from "../../assets/svg/footer-svg/Mail.svg";
+import PhoneIcon from "../../assets/svg/footer-svg/phone.svg";
+import Instagram from "../../assets/svg/footer-svg/instagram.svg";
+import Facebook from "../../assets/svg/footer-svg/facebook.svg";
+import TikTok from "../../assets/svg/footer-svg/TikTok.svg";
+import AndSymbol from "../../assets/svg/footer-svg/andSymbol.svg";
+import CurlyBrackets from "../../assets/svg/footer-svg/curlyBrackets.svg";
+import ArrowUp from "../../assets/svg/footer-svg/ArrowUp.svg";
+import Star from "../../assets/svg/footer-svg/Star.svg";
+import leftRectangle from "../../assets/svg/footer-svg/left-rectangle.svg";
 
 function Footer() {
   return (
     <>
       <HStack
-        alignItems={"flex-end"}
-        width={"100%"}
-        justifyContent={"space-around"}
+        alignItems="flex-end"
+        width={{ base: "100%", md: "60%", lg: "100%" }}
+        justifyContent="space-around"
       >
-        <Image src={LeftSymbols} pl={"50px"} />
-        <Image src={AndSymbol} />
-        <Image src={CurlyBrackets} />
-        <Image src={ArrowUp} />
-        <Image src={Star} />
+        <VStack justifyContent="flex-end" alignItems={"flex-end"} height="100%">
+          <Image src={leftRectangle} />
+        </VStack>
+        <VStack justifyContent="flex-end" height="100%">
+          <Image src={AndSymbol} />
+        </VStack>
+        <VStack justifyContent="flex-end" height="100%">
+          <Image src={CurlyBrackets} />
+        </VStack>
+        <VStack justifyContent="flex-end" height="100%">
+          <Image src={ArrowUp} />
+        </VStack>
+        <VStack justifyContent="flex-end" height="100%">
+          <Image src={Star} />
+        </VStack>
       </HStack>
 
       <VStack
@@ -39,6 +49,7 @@ function Footer() {
           height={"100%"}
           width={"100%"}
           justifyContent={"space-between"}
+          flexDirection={{ base: "column", md: "row" }}
         >
           <VStack
             width={"50%"}

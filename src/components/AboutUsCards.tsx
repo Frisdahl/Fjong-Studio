@@ -1,172 +1,130 @@
-import React, { useState } from "react";
-import { VStack, Text, HStack, Image, Box, Link } from "@chakra-ui/react";
-import { motion } from "framer-motion";
+import React from "react";
+import { VStack, Text, HStack, Image, Box, Flex } from "@chakra-ui/react";
 import { Divider } from "@chakra-ui/react";
 import AlexanderPortrait from "../assets/images/alexander-portrait.jpg";
-import ArrowIcon from "../assets/svg/arrow.svg";
-
-const MotionImage = motion(Image);
+import asterisk from "../assets/svg/asterisk.svg";
 
 const AboutUs = {
   name: "Alexander Frisdahl",
   title: "Webudvikler",
   workarea1: "Skaber brandidentitet gennem React, Typescript og Figma",
   workarea2: "Udvikler intuitive brugeroplevelser med moderne teknologi",
-  quete: "“Building digital solutions with focus on design and performance.”",
+  quete: "Building digital solutions with focus on design and performance.",
 };
 
 function AboutUsCards() {
-  const [isLinkHovered, setIsLinkHovered] = useState(false);
-
   return (
     <>
       <VStack
         position="relative"
-        bg="accent.sandLight"
-        borderRadius="50px"
-        p="50px"
+        bg="white.light"
+        borderRadius={{ base: "25px", md: "50px" }}
+        p={{ base: "25px", md: "35px", lg: "50px" }}
         alignItems="start"
+        w="100%"
+        boxShadow="0px 4px 20px 0px rgba(27, 26, 26, 0.1)" // Add this line for the shadow
       >
-        <VStack pb={"20px"} align="start">
-          <Text as={"h4"} textStyle={"h4"}>
+        <VStack
+          pb={{ base: "10px", md: "10px", lg: "15px" }}
+          align="start"
+          gap={0}
+        >
+          <Text
+            as="h4"
+            textStyle="h4"
+            pb={{ base: "5px", md: "5px", lg: "10px" }}
+          >
             {AboutUs.name}
           </Text>
-          <Text as={"text"} textStyle={"text"}>
+          <Text as="text" textStyle="h5" fontWeight={"extralight"}>
             {AboutUs.title}
           </Text>
         </VStack>
+
         <Divider borderColor="font.dark" opacity={0.3} borderWidth="1px" />
 
-        <HStack pt={"75px"}>
-          <VStack gap={"50px"}>
-            <Text as={"text"} textStyle={"text"}>
-              {AboutUs.workarea1}
-            </Text>
-            <Text as={"text"} textStyle={"text"}>
-              {AboutUs.workarea2}
-            </Text>
+        {/* Main content section - stack vertically on mobile */}
+        <Flex
+          pt={{ base: "25px", md: "50px", lg: "75px" }}
+          direction={{ base: "column", md: "row" }}
+          w="100%"
+          align={{ base: "center", md: "center", lg: "center" }}
+          gap={{ base: 8, md: 4 }}
+        >
+          {/* Left content */}
+          <VStack
+            gap={{ base: "25px", md: "35px", lg: "50px" }}
+            maxW={{ base: "100%", md: "50%", lg: "50%" }}
+            align="start"
+            flex="1"
+          >
+            <HStack alignItems="flex-start">
+              <Image
+                src={asterisk}
+                boxSize={{ base: "0.8rem", md: "1rem" }}
+                color="font"
+                opacity="50%"
+              />
+              <Text as="text" textStyle="text" color="font">
+                {AboutUs.workarea1}
+              </Text>
+            </HStack>
+
+            <HStack alignItems="flex-start" spacing={3}>
+              <Image
+                src={asterisk}
+                boxSize={{ base: "0.8rem", md: "1rem" }}
+                color="font"
+                opacity="50%"
+              />
+              <Text as="text" textStyle="text" color="font">
+                {AboutUs.workarea2}
+              </Text>
+            </HStack>
           </VStack>
-          <Image src={AlexanderPortrait} borderRadius={"50%"} width={"50%"} />
-        </HStack>
-        <HStack
-          alignItems={"flex-end"}
-          justifyContent={"space-between"}
+
+          {/* Image - order changes on mobile */}
+          <Box
+            flex={{ base: "1", md: "0.8" }}
+            order={{ base: -1, md: 2 }}
+            mb={{ base: 4, md: 0 }}
+            textAlign={{ base: "center", md: "right" }}
+            display={"flex"}
+            justifyContent={{ base: "center", md: "flex-start" }}
+          >
+            <Image
+              src={AlexanderPortrait}
+              borderRadius="50%"
+              width={{ base: "100%", md: "80%", lg: "100%" }}
+            />
+          </Box>
+        </Flex>
+
+        {/* Quote section */}
+        <Flex
+          pt={{ base: "25px", md: "40px" }}
+          alignItems="flex-end"
+          justifyContent="space-between"
           width="100%"
         >
-          <VStack pt={"50px"} align="start">
-            <Text>{AboutUs.quete}</Text>
-            <Text>
+          <VStack align="start" spacing={1}>
+            <Text
+              fontStyle="italic"
+              as={"text"}
+              textStyle="text"
+              color="font"
+              fontWeight={"medium"}
+              mb={"10px"}
+            >
+              {AboutUs.quete}{" "}
+            </Text>
+            <Text as={"text"} textStyle="text" color="font">
               {"— "}
               {AboutUs.name}
             </Text>
           </VStack>
-
-          {/* Custom Link with Inverted Border Radius */}
-          <Box
-            className="c-card__title"
-            position="relative"
-            onMouseEnter={() => setIsLinkHovered(true)}
-            onMouseLeave={() => setIsLinkHovered(false)}
-          >
-            <Box
-              className="--inverted-border-radius --bottom-right"
-              position="relative"
-              width="fit-content"
-              paddingY="0.5em"
-              paddingX="1em"
-              bg="font.dark"
-              color="white.cream"
-              borderRadius="8px"
-              borderBottomRightRadius="0"
-              fontWeight="medium"
-              cursor="pointer"
-              _after={{
-                content: '""',
-                position: "absolute",
-                width: "10px",
-                height: "10px",
-                bottom: "0",
-                right: "0",
-                transform: "translate(100%)",
-                background: "transparent",
-                borderBottomLeftRadius: "8px",
-                boxShadow: "-3px 2px 0 0 var(--bg-color)",
-              }}
-              sx={{ "--bg-color": "var(--chakra-colors-font-dark)" }}
-            >
-              <Link
-                href="#contact"
-                display="flex"
-                alignItems="center"
-                _hover={{ textDecoration: "none" }}
-              >
-                Book en samtale
-                <Box as="span" ml={2} display="inline-flex">
-                  <MotionImage
-                    src={ArrowIcon}
-                    alt="Arrow"
-                    width="24px"
-                    height="24px"
-                    filter="brightness(0) invert(1)" // Makes the icon white
-                    initial={{ x: 0, y: 0 }}
-                    animate={
-                      isLinkHovered
-                        ? {
-                            x: [0, 3, 0],
-                            y: [-1, -5, -1],
-                          }
-                        : { x: 0, y: 0 } // Reset position when not hovered
-                    }
-                    transition={{
-                      x: {
-                        duration: 2,
-                        ease: "easeInOut",
-                        repeat: isLinkHovered ? Infinity : 0,
-                        repeatType: "loop",
-                      },
-                      y: {
-                        duration: 2,
-                        ease: "easeInOut",
-                        repeat: isLinkHovered ? Infinity : 0,
-                        repeatType: "loop",
-                      },
-                    }}
-                  />
-                </Box>
-              </Link>
-            </Box>
-          </Box>
-        </HStack>
+        </Flex>
       </VStack>
-
-      {/* Add CSS for inverted border radius */}
-      <Box
-        as="style"
-        dangerouslySetInnerHTML={{
-          __html: `
-        .c-card__title .--inverted-border-radius::before,
-        .c-card__title .--inverted-border-radius::after {
-          content: "";
-          position: absolute;
-          width: 10px;
-          height: 10px;
-        }
-        
-        .c-card__title .--inverted-border-radius.--bottom-right {
-          border-bottom-right-radius: 0;
-        }
-        
-        .c-card__title .--inverted-border-radius.--bottom-right::after {
-          bottom: 0;
-          right: 0;
-          transform: translate(100%);
-          background: transparent;
-          border-bottom-left-radius: 8px;
-          box-shadow: -3px 2px 0 0 var(--bg-color);
-        }
-      `,
-        }}
-      />
     </>
   );
 }

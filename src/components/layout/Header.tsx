@@ -219,7 +219,7 @@ function Header() {
     >
       <HStack
         ref={headerRef}
-        padding={{ base: "35px 35px", md: "50px 75px" }}
+        padding={{ base: "0px 35px", md: "0px 50px", xl: "0px 75px" }}
         zIndex={"999"}
         position="fixed"
         height={"100px"}

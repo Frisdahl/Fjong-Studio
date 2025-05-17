@@ -94,7 +94,6 @@ const FAQItem: React.FC<{
   indexWidth: number;
 }> = ({ item, index, indexWidth }) => {
   const { isOpen, onToggle } = useDisclosure();
-  console.log(indexWidth);
 
   return (
     <Box borderBottom="1px solid" borderColor="gray.200" position="relative">

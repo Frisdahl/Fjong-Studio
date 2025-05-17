@@ -20,6 +20,7 @@ const colors = {
   white: {
     100: "#FFFFFF", // 100%
     default: "#FAFAFA", // 100%
+    light: "#F6F7F7", // 100%
     off: "#EAEAEA", // 100%
     cream: "#F6F6F6", // 100%
   },
@@ -39,8 +40,6 @@ const colors = {
 };
 
 const fontWeights = {
-  hairline: 100,
-  thin: 200,
   light: 300,
   normal: 400,
   medium: 500,
@@ -71,14 +70,14 @@ const fonts = {
 // Define text styles for typography
 const textStyles = {
   h1: {
-    fontSize: ["2.75rem", "3rem", "4rem", "7.875rem"], // sm, md, lg, xl, 2xl
-    fontWeight: "extra-light",
+    fontSize: ["2.25rem", "3.25rem", "3rem", "3.875rem", "6.875rem"], // sm, md, lg, xl, 2xl
+    fontWeight: "regular",
     letterSpacing: "-0.02em",
     lineHeight: "0.7", // Added this line - value between 0.9-1.0 for tight headings
   },
   h2: {
-    fontSize: ["2rem", "3rem", "5.625rem", "6.875rem"], // sm, md, lg, xl, 2xl
-    fontWeight: "semibold",
+    fontSize: ["2.5rem", "3rem", "5.625rem", "5.875rem", "6.875rem"], // sm, md, lg, xl, 2xl
+    fontWeight: "regular",
     lineHeight: "0.8",
   },
   h3: {
@@ -87,12 +86,12 @@ const textStyles = {
     lineHeight: "110%",
   },
   h4: {
-    fontSize: ["1.75rem", "1.75rem", "2.75rem", "3.25rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["1.5rem", "1.5rem", "1.75rem", "3.25rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
   h5: {
-    fontSize: ["1.5rem", "1.5rem", "1.5rem", "1.75rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["1.25rem", "1.5rem", "1.5rem", "1.75rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
@@ -102,21 +101,25 @@ const textStyles = {
   },
   text: {
     fontSize: ["1rem", "1.125rem", "1.25rem"], // sm, md, lg, xl, 2xl
+    lineHeight: "100%",
     fontWeight: "light",
   },
   // Add more as needed
 };
 
-// Define common border radius values
-const radii = {
-  none: "0",
-  sm: "0.125rem",
-  base: "0.25rem",
-  md: "0.375rem",
-  lg: "0.5rem",
-  xl: "0.75rem",
-  "2xl": "1rem",
-  "3xl": "1.5rem",
+const space = {
+  // Heading spacing
+  "heading-sm": "2rem",
+  "heading-md": "3rem",
+  "heading-lg": "8rem",
+  "heading-xl": "10rem",
+  "heading-2xl": "15rem",
+
+  // Section spacing
+  "section-sm": "2rem",
+  "section-md": "3rem",
+  "section-lg": "8rem",
+  "section-xl": "10rem",
 };
 
 // Create your Chakra theme
@@ -126,7 +129,7 @@ const theme = extendTheme({
   textStyles,
   fontWeights,
   breakpoints,
-  radii,
+  space,
   // You can also customize component-specific styles
   components: {
     Button: {
