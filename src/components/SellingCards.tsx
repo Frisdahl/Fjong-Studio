@@ -1,42 +1,63 @@
-import { Box, Text, Image } from "@chakra-ui/react";
+import { Box, Text, Image, Divider, HStack } from "@chakra-ui/react";
 import { useRef, useEffect, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+// Import as React component instead of direct image
+import arrowSvg from "../assets/svg/arrow.svg";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 }
 
-interface SellingCardsProps {
-  cardIndex: number;
+// Define the card content type
+export interface CardContent {
+  title: string;
+  description: string;
+  imageSrc: string;
 }
 
-function SellingCards({ cardIndex = 0 }: SellingCardsProps) {
-  const cardContent = [
-    {
-      title: "unikt design",
-      description:
-        "Med 6 års erfaring inden for design ved vi, hvordan man effektivt præsenterer information på en hjemmeside, så den fanger og fastholder brugerens opmærksomhed.",
-      imageSrc: "/images/design.jpg",
-    },
-    {
-      title: "responsivt layout",
-      description:
-        "Vi bygger hjemmesider der tilpasser sig perfekt til alle skærmstørrelser, fra mobil til desktop, og sikrer en flydende brugeroplevelse uanset enhed.",
-      imageSrc: "/images/responsive.jpg",
-    },
-    {
-      title: "optimeret hastighed",
-      description:
-        "Hurtige hjemmesider giver bedre brugeroplevelse og højere konverteringsrate. Vi optimerer hver linje kode for at sikre lynhurtig indlæsningstid.",
-      imageSrc: "/images/speed.jpg",
-    },
-  ];
+// Updated interface with optional content prop
+interface SellingCardsProps {
+  cardIndex?: number;
+  cards?: CardContent[];
+  selectedCard?: CardContent; // Allow passing a single card directly
+  iconSrc?: string; // Use string path instead of React.ElementType
+  showImage?: boolean; // Control whether to show the arrow image
+}
 
-  // Select the appropriate card content
-  const card = cardContent[cardIndex] || cardContent[0];
+// Default card content
+const defaultCardContent: CardContent[] = [
+  {
+    title: "unikt design",
+    description:
+      "Med 6 års erfaring inden for design ved vi, hvordan man effektivt præsenterer information på en hjemmeside, så den fanger og fastholder brugerens opmærksomhed.",
+    imageSrc: "/images/design.jpg",
+  },
+  {
+    title: "responsivt layout",
+    description:
+      "Vi bygger hjemmesider der tilpasser sig perfekt til alle skærmstørrelser, fra mobil til desktop, og sikrer en flydende brugeroplevelse uanset enhed.",
+    imageSrc: "/images/responsive.jpg",
+  },
+  {
+    title: "optimeret hastighed",
+    description:
+      "Hurtige hjemmesider giver bedre brugeroplevelse og højere konverteringsrate. Vi optimerer hver linje kode for at sikre lynhurtig indlæsningstid.",
+    imageSrc: "/images/speed.jpg",
+  },
+];
+
+function SellingCards({
+  cardIndex = 0,
+  cards = defaultCardContent,
+  selectedCard,
+  iconSrc = arrowSvg, // Default to arrow SVG path
+  showImage = true, // Default to showing the image
+}: SellingCardsProps) {
+  // If a specific card is provided, use it, otherwise select from the array
+  const card = selectedCard || cards[cardIndex] || cards[0];
 
   // Create managed lines for the description
   const [processedLines, setProcessedLines] = useState<string[]>([]);
@@ -173,57 +194,77 @@ function SellingCards({ cardIndex = 0 }: SellingCardsProps) {
   }, [processedLines]);
 
   return (
-    <Box
-      width="100%"
-      padding="50px 0px"
-      display="flex"
-      alignItems={"center"}
-      flexDirection={{ base: "column", md: "row" }}
-      gap={{ base: "25px", md: "50px" }}
-    >
-      <Image
-        height={{ base: "200px", md: "250px" }}
-        width={{ base: "100%", md: "30%" }}
-        src={card.imageSrc}
-        fallbackSrc="https://via.placeholder.com/300x250"
-        objectFit="cover"
-      />
+    <>
+      <Divider borderColor="1a1a1a" border={"1px solid"} />
       <Box
+        width="100%"
+        padding="50px 0px"
         display="flex"
-        flexDirection="column"
-        alignItems="flex-start"
-        width={{ base: "100%", md: "70%" }}
-        gap={"15px"}
+        alignItems={"center"}
+        flexDirection={{ base: "column", md: "row" }}
+        gap={{ base: "25px", md: "50px" }}
       >
-        <Text as="h3" textStyle="h3">
-          {card.title}
-        </Text>
-
+        <Image
+          height={{ base: "200px", md: "250px" }}
+          width={{ base: "100%", md: "25%" }}
+          src={card.imageSrc}
+          fallbackSrc="https://via.placeholder.com/300x250"
+          objectFit="cover"
+        />
         <Box
-          ref={containerRef}
-          maxWidth={{ base: "100%", md: "750px" }}
-          width="100%"
+          display="flex"
+          flexDirection="column"
+          alignItems="flex-start"
+          width={{ base: "100%", md: "75%" }}
+          gap={"15px"}
         >
-          {/* Manually render each line with animation */}
-          {processedLines.map((line, index) => (
-            <Box
-              key={`line-${index}`}
-              ref={(el) => {
-                linesRef.current[index] = el;
-              }}
-              className="split-line"
-              display="block"
-              overflow="hidden"
-              textStyle={"text"}
-              marginBottom={index < processedLines.length - 1 ? "0.3em" : 0}
-              width="100%"
-            >
-              {line}
-            </Box>
-          ))}
+          <HStack>
+            <Text as="h3" textStyle="h3">
+              {card.title}
+            </Text>
+            {showImage && (
+              <Box color="accent.yellow">
+                {" "}
+                {/* Set the color context */}
+                <Image
+                  src={iconSrc}
+                  boxSize="2rem"
+                  style={{
+                    filter:
+                      "brightness(0) saturate(100%) invert(80%) sepia(50%) saturate(500%) hue-rotate(360deg) brightness(103%) contrast(102%)",
+                  }}
+                  /* This filter approximates a yellow color - adjust as needed */
+                />
+              </Box>
+            )}
+          </HStack>
+
+          <Box
+            ref={containerRef}
+            maxWidth={{ base: "100%", md: "750px", xl: "1000px" }}
+            width="100%"
+          >
+            {/* Manually render each line with animation */}
+            {processedLines.map((line, index) => (
+              <Box
+                key={`line-${index}`}
+                ref={(el) => {
+                  linesRef.current[index] = el;
+                }}
+                className="split-line"
+                display="block"
+                overflow="hidden"
+                textStyle={"text"}
+                marginBottom={index < processedLines.length - 1 ? "0.3em" : 0}
+                width="100%"
+              >
+                {line}
+              </Box>
+            ))}
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

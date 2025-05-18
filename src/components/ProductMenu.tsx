@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import AnimatedElement from "./animations/AnimatedElement";
 import fireIcon from "../assets/svg/fire-icon.svg"; // Import the fire icon
+import arrowIcon from "../assets/svg/arrow.svg"; // Import the arrow icon
 
 // Define a type for valid tab names
 type TabName = "startpakke" | "virksomhed" | "propakke";
@@ -275,8 +276,9 @@ export default function ProductMenu() {
               base: "repeat(1, 1fr)",
               md: "repeat(2, 1fr)",
               lg: "repeat(3, 1fr)",
+              xl: "repeat(4, 1fr)",
             }}
-            gap={{ base: "1rem", md: "2rem" }}
+            gap={{ base: "1rem", md: "2rem", lg: "3rem" }}
           >
             {menuContent[activeTab].features.map(
               (feature: string, index: number) => {
@@ -301,7 +303,7 @@ export default function ProductMenu() {
 
                 return (
                   <GridItem key={`${activeTab}-${feature}-${index}`}>
-                    <VStack align="flex-start" spacing={1}>
+                    <VStack align="flex-start">
                       {shouldAnimate ? (
                         // Animate both feature name and description for new features
                         <AnimatedElement
@@ -337,18 +339,16 @@ export default function ProductMenu() {
         alignSelf={"end"}
         py={{ base: "1rem", md: "1.5rem", lg: "1.5rem" }}
         px={{ base: "1rem", md: "1.5rem", lg: "2rem" }}
+        gap={"10px"}
         bg={"accent.yellow"}
         color={"font.dark"}
-        fontWeight={"regular"}
-        _hover={{
-          px: { base: "2rem", md: "2.5rem", lg: "3rem" }, // Increased padding
-          bg: "accent.yellow",
-        }}
+        fontWeight={"medium"}
         borderRadius={{ base: "50px", md: "50px", lg: "50px" }}
         mb={{ base: "1rem", md: "1.5rem", lg: "2rem" }}
         mr={{ base: "1rem", md: "1.5rem", lg: "2rem" }}
       >
         Få et gratis tilbud
+        <Image src={arrowIcon} />
       </Button>
     </VStack>
   );

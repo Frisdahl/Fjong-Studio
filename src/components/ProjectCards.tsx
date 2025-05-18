@@ -31,9 +31,13 @@ const motionProps = {
 
 interface ProjectCardsProps {
   cardIndex: number; // Index to select which card content to display
+  bgColor?: string; // Optional background color prop
 }
 
-function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
+function ProjectCards({
+  cardIndex = 0,
+  bgColor = "black.900",
+}: ProjectCardsProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const cardRef = useRef<HTMLDivElement>(null);
@@ -80,7 +84,6 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
 
   return (
     <HStack
-      height={"100%"}
       ref={cardRef}
       flexDirection={"column"}
       alignItems={"flex-start"}
@@ -94,6 +97,7 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
       onMouseLeave={() => setIsHovered(false)}
       onMouseMove={handleMouseMove}
       cursor="none"
+      bg={bgColor}
     >
       {/* Hover Circle with Arrow and Text */}
       <AnimatePresence>
@@ -102,11 +106,11 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
             position="absolute"
             top={`${mousePosition.y}px`}
             left={`${mousePosition.x}px`}
-            bg="white.100"
             borderRadius="50%"
             zIndex="10"
             flexDirection="column"
             pointerEvents="none"
+            bg={"white.100"}
             style={{
               transform: "translate(-50%, -50%)",
             }}
@@ -170,7 +174,6 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
       </AnimatePresence>
 
       <Image
-        height={{ base: "100%", md: "100%" }}
         borderRadius={{ base: "15px", md: "50px" }}
         width={"100%"}
         src={
@@ -185,7 +188,7 @@ function ProjectCards({ cardIndex = 0 }: ProjectCardsProps) {
       <VStack
         justifyContent={"flex-start"}
         alignItems={"flex-start"}
-        padding={{ base: "25px", md: "25px", lg: "50px" }}
+        padding={{ base: "25px", md: "25px", lg: "25px", xl: "50px" }}
         width="100%"
       >
         <Text as="h4" textStyle="h4" color={"white.100"}>

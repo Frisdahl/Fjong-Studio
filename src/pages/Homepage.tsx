@@ -74,6 +74,12 @@ function Homepage() {
     xl: "5rem",
   };
 
+  const sectionRadius = {
+    base: "25px",
+    md: "50px",
+    lg: "75px",
+  };
+
   return (
     <>
       <HStack
@@ -347,22 +353,20 @@ function Homepage() {
               </ScrollRevealText>
             </Text>
           </VStack>
-          <Divider borderColor="1a1a1a" border={"1px solid"} />
-          <SellingCards cardIndex={0} />
-          <Divider borderColor="1a1a1a" border={"1px solid"} />
-          <SellingCards cardIndex={1} />
-          <Divider borderColor="1a1a1a" border={"1px solid"} />
-          <SellingCards cardIndex={2} />
+
+          <SellingCards cardIndex={0} showImage={false} />
+          <SellingCards cardIndex={1} showImage={false} />
+          <SellingCards cardIndex={2} showImage={false} />
           <Divider borderColor="1a1a1a" border={"1px solid"} />
         </HStack>
       </HStack>
       <HStack
         ref={portfolioRef}
         flexDirection={"column"}
+        mx={{ base: "0px", md: "0px", lg: "20px" }}
         padding={{ base: "75px 35px", md: "150px 75px" }}
-        bg={"accent.sandMed"}
-        borderRadius={{ base: "50px", md: "50px", lg: "100px" }}
-        width={"100%"}
+        bg={"white.cream"}
+        borderRadius={sectionRadius}
         alignItems={"flex-start"}
         mt={sectionSpacing}
         id="projekter"
@@ -393,6 +397,7 @@ function Homepage() {
               as={"text"}
               textStyle={"text"}
               maxW={"400px"}
+              lineHeight={"125%"}
               textAlign={"right"}
               display={{ base: "none", md: "block" }}
               width={{ base: "100%", md: "75%", lg: "100%" }}
@@ -407,33 +412,17 @@ function Homepage() {
           gap={{ base: "25px", md: "50px", lg: "50px" }}
           width="100%"
         >
-          <GridItem
-            width={"100%"}
-            bg={"accent.blue"}
-            borderRadius={{ base: "25px", md: "50px" }}
-          >
-            <ProjectCards cardIndex={0} />
+          <GridItem width={"100%"}>
+            <ProjectCards cardIndex={1} bgColor={"accent.blue"} />
           </GridItem>
-          <GridItem
-            width={"100%"}
-            bg={"accent.sand"}
-            borderRadius={{ base: "25px", md: "50px" }}
-          >
-            <ProjectCards cardIndex={1} />
+          <GridItem width={"100%"}>
+            <ProjectCards cardIndex={1} bgColor="accent.sand" />
           </GridItem>
-          <GridItem
-            width={"100%"}
-            bg={"gray.mid"}
-            borderRadius={{ base: "25px", md: "50px" }}
-          >
-            <ProjectCards cardIndex={2} />
+          <GridItem width={"100%"}>
+            <ProjectCards cardIndex={1} bgColor="gray.mid" />
           </GridItem>
-          <GridItem
-            width={"100%"}
-            bg={"gray.light"}
-            borderRadius={{ base: "25px", md: "50px" }}
-          >
-            <ProjectCards cardIndex={3} />
+          <GridItem width={"100%"}>
+            <ProjectCards cardIndex={3} bgColor="gray.light" />
           </GridItem>
         </Grid>
       </HStack>
@@ -459,6 +448,76 @@ function Homepage() {
         </VStack>
 
         <ProductMenu />
+      </VStack>
+
+      <VStack
+        mx={{ base: "0px", md: "0px", lg: "20px" }}
+        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
+        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
+        borderRadius={sectionRadius}
+        justifyContent={"space-between"}
+        alignItems={"flex-start"}
+        mb={headingSpacing}
+        mt={sectionSpacing}
+        bg={"gray.metallic"}
+        color={"white.cream"}
+        padding={{ base: "75px 35px", md: "150px 75px" }}
+      >
+        <HStack
+          width={"100%"}
+          justifyContent={"space-between"}
+          alignItems={"flex-end"}
+          mb={headingSpacing}
+        >
+          <HStack flexDirection={"column"} alignItems={"flex-start"}>
+            <Text as={"text"} textStyle={"h5"}>
+              Se hvad vi ellers
+            </Text>
+            <Text as={"h2"} textStyle={"h2"}>
+              tilbyder
+            </Text>
+          </HStack>
+
+          <HStack flexDirection={"column"} alignItems={"flex-end"}>
+            <Text
+              as={"text"}
+              textStyle={"text"}
+              lineHeight={"125%"}
+              maxW={"400px"}
+              textAlign={"right"}
+              display={{ base: "none", md: "block" }}
+              width={{ base: "100%", md: "75%", lg: "100%" }}
+            >
+              Udover hjemmesideudvikling tilbyder vi et komplet udvalg af
+              services til visuel branding af produkter og services.
+            </Text>
+          </HStack>
+        </HStack>
+        <SellingCards
+          selectedCard={{
+            title: "Præsentations design",
+            description:
+              "Vi hjælper med at skabe visuelt stærke præsentationer, der gør komplekse budskaber lette at forstå og tiltrækker brugerens opmærksomhed fra første øjekast.",
+            imageSrc: "/images/special.jpg",
+          }}
+        />
+        <SellingCards
+          selectedCard={{
+            title: "Branding og Identitet",
+            description:
+              "Vi styrker din virksomheds visuelle identitet gennem gennemtænkt design, der skaber genkendelighed og troværdighed på tværs af platforme og medier.",
+            imageSrc: "/images/special.jpg",
+          }}
+        />
+        <SellingCards
+          selectedCard={{
+            title: "Tryksager og grafisk design",
+            description:
+              "Vi skaber professionelle materialer som flyers, brochurer, visitkort og plakater, der visuelt understøtter din kommunikation – både digitalt og på tryk.",
+            imageSrc: "/images/special.jpg",
+          }}
+        />
+        <Divider borderColor="1a1a1a" border={"1px solid"} />
       </VStack>
 
       <VStack

@@ -14,6 +14,7 @@ const colors = {
   gray: {
     darkMid: "#1A1A1A70", // 70%
     darkLight: "#1A1A1A30", // 30%
+    metallic: "#60666C", // 100%
     mid: "#333333", // 100%
     light: "#3E4440", // 100%
   },
