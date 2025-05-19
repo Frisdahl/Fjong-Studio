@@ -63,7 +63,7 @@ const breakpoints = {
   sm: "30em", // 480px
   md: "48em", // 768px
   lg: "62em", // 992px
-  xl: "81.25em", // 1300px (changed from default 1280px)
+  xl: "90.25em", // 1300px (changed from default 1280px)
   "2xl": "96em", // 1536px
 };
 
