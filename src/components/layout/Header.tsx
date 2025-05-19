@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Link,
@@ -12,105 +12,16 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import logo from "../../assets/logo.svg";
-import logoWhite from "../../assets/logo-white.svg";
+import { gsap } from "gsap";
+import { useScroll } from "../../context/ScrollContext";
+import logo from "../../assets/svg/logo.svg";
+import logoWhite from "../../assets/svg/logo-white.svg";
 import BurgerMenuIcon from "../BurgerMenuIcon";
+import AnimatedElement from "../animations/AnimatedElement";
+
 // Constants and motion components
-const DURATION = 0.25;
-const STAGGER = 0.025;
 const MotionBox = motion(Box);
 const MotionImage = motion(Image);
-
-// NavLink component
-const NavLink: React.FC<NavLinkProps> = ({
-  children,
-  to,
-  isMobile = false,
-  isInverted = false,
-}) => {
-  const text = children?.toString() || "";
-  const [isHovered, setIsHovered] = React.useState(false);
-  const [hasRendered, setHasRendered] = React.useState(false);
-
-  React.useEffect(() => {
-    setHasRendered(true);
-  }, []);
-
-  return (
-    <RouterLink
-      to={to}
-      style={{
-        textDecoration: "none",
-        display: "inline-block",
-        height: isMobile ? "5em" : "1.5em",
-        lineHeight: isMobile ? "5em" : "1.5em",
-      }}
-    >
-      <Box
-        position="relative"
-        overflow="hidden"
-        height="100%"
-        width="100%"
-        display="inline-block"
-        fontFamily={
-          isMobile ? "ClashDisplay-Extralight" : "'Clash Display', sans-serif"
-        }
-        fontSize={isMobile ? "3.5rem" : "1.125rem"}
-        textStyle="links"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        cursor="pointer"
-        color={isInverted ? "white" : "inherit"}
-      >
-        {/* Top text */}
-        <Box width="100%" textAlign="center" position="relative">
-          {text.split("").map((char, i) => (
-            <MotionBox
-              key={`top-${i}`}
-              as="span"
-              display="inline-block"
-              initial={{ y: 0 }}
-              animate={{
-                y: isHovered ? "-100%" : 0,
-              }}
-              transition={{
-                duration: DURATION,
-                ease: "easeInOut",
-                delay: STAGGER * i,
-                immediate: !hasRendered,
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </MotionBox>
-          ))}
-        </Box>
-
-        {/* Bottom text */}
-        <Box position="absolute" inset="0" width="100%" textAlign="center">
-          {text.split("").map((char, i) => (
-            <MotionBox
-              key={`bottom-${i}`}
-              as="span"
-              display="inline-block"
-              initial={{ y: "100%" }}
-              animate={{
-                y: isHovered ? 0 : "100%",
-              }}
-              transition={{
-                duration: DURATION,
-                ease: "easeInOut",
-                delay: STAGGER * i,
-                immediate: !hasRendered,
-              }}
-            >
-              {char === " " ? "\u00A0" : char}
-            </MotionBox>
-          ))}
-        </Box>
-      </Box>
-    </RouterLink>
-  );
-};
 
 interface NavLinkProps {
   children: React.ReactNode;
@@ -119,213 +30,400 @@ interface NavLinkProps {
   isInverted?: boolean;
 }
 
-const Links = [
-  { name: "Projekter", path: "/projekter" },
-  { name: "Ydelser", path: "/ydelser" },
-  { name: "Kontakt", path: "/kontakt" },
+// Add this interface definition after your other interfaces
+interface SectionObserver {
+  element: Element;
+  observer: IntersectionObserver;
+}
+
+const links = [
+  { name: "Projekter", path: "projekter" }, // Changed from "/projekter" to "projekter"
+  { name: "Ydelser", path: "ydelser" }, // Changed from "/ydelser" to "ydelser"
+  { name: "Kontakt", path: "kontakt" }, // Changed from "/kontakt" to "kontakt"
 ];
 
 function Header() {
+  // Add location to detect route changes
+
+  // Add activeSection state
+  const [activeSection, setActiveSection] = useState("");
+
+  // Use IntersectionObserver to detect which section is in view
+  useEffect(() => {
+    const sections = ["projekter", "ydelser", "kontakt"];
+    const observers: SectionObserver[] = []; // Add the type annotation here
+
+    sections.forEach((sectionId) => {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setActiveSection(sectionId);
+            }
+          },
+          { threshold: 0.3 } // When 30% of the section is visible
+        );
+
+        observer.observe(element);
+        observers.push({ element, observer });
+      }
+    });
+
+    // Cleanup
+    return () => {
+      observers.forEach(({ element, observer }) => {
+        observer.unobserve(element);
+      });
+    };
+  }, []);
+
+  // Rest of your state variables
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toggleRef = React.useRef<HTMLButtonElement>(null);
   const [togglePosition, setTogglePosition] = React.useState({ x: 0, y: 0 });
+  const headerRef = useRef<HTMLDivElement>(null);
 
-  // Update toggle position when it changes
-  React.useEffect(() => {
-    const updatePosition = () => {
-      if (toggleRef.current) {
-        const rect = toggleRef.current.getBoundingClientRect();
-        setTogglePosition({
-          x: rect.right - rect.width / 2,
-          y: rect.top + rect.height / 2,
-        });
+  // Add this to update position when menu state changes
+  useEffect(() => {
+    if (toggleRef.current) {
+      const rect = toggleRef.current.getBoundingClientRect();
+      setTogglePosition({
+        x: rect.right - rect.width / 2,
+        y: rect.top + rect.height / 2,
+      });
+    }
+  }, [isOpen]);
+
+  // Enhanced animation with reset
+  useEffect(() => {
+    if (headerRef.current) {
+      // Create a reusable timeline for header animations
+      const tl = gsap.timeline();
+
+      // First set initial state or reset to invisible
+      tl.set(headerRef.current, { opacity: 0 });
+
+      // Then animate to visible
+      tl.to(headerRef.current, {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out",
+        delay: 0.2,
+      });
+
+      return () => {
+        // Clean up by killing the timeline when unmounting or route changes
+        tl.kill();
+      };
+    }
+  }, [location.pathname]);
+
+  // Fixed NavLink component to properly use AnimatedLink
+  const NavLink: React.FC<NavLinkProps> = ({
+    children,
+    to,
+    isMobile = false,
+    isInverted = false,
+  }) => {
+    const { scrollToSection } = useScroll();
+    const isActive = to === activeSection;
+
+    // Create a combined handler for both closing menu and scrolling
+    const handleClick = (e: React.MouseEvent) => {
+      e.preventDefault(); // Prevent default link behavior
+
+      if (isMobile && onClose) {
+        // First close the menu
+        onClose();
+
+        // Then scroll after animation completes
+        setTimeout(() => {
+          scrollToSection(to);
+        }, 800); // Wait for menu close animation
+      } else {
+        // On desktop, just scroll immediately
+        scrollToSection(to);
       }
     };
 
-    updatePosition();
+    return (
+      <Box
+        as="button"
+        onClick={handleClick}
+        color={
+          isInverted ? "white.cream" : isActive ? "accent.blue" : "inherit"
+        }
+        fontWeight={isActive ? "medium" : "medium"}
+        fontSize={isMobile ? "4rem" : "1.25rem"}
+        height={isMobile ? "1.5em" : "1.5em"}
+        lineHeight={isMobile ? "1.5em" : "1.5em"}
+        textDecoration="none"
+        background="none"
+        border="none"
+        cursor="pointer"
+        position="relative"
+        _focus={{ outline: "none" }}
+        _hover={{
+          color: isInverted ? "white.cream" : "accent.blue",
+        }}
+        transition="color 0.3s"
+      >
+        {children}
+        {/* Optionally, you can add a custom underline effect here if needed */}
+      </Box>
+    );
+  };
 
-    // Update position on resize
-    window.addEventListener("resize", updatePosition);
-    return () => window.removeEventListener("resize", updatePosition);
-  }, []);
+  // Add this near your other state variables
+  const [scrolled, setScrolled] = useState(false);
+
+  // Add scroll event listener
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      const newScrolled = offset > 50;
+
+      // Only log when state changes to avoid console spam
+      if (newScrolled !== scrolled) {
+        console.log("Scroll state changed:", newScrolled);
+        setScrolled(newScrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial call
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [scrolled]); // Add scrolled as dependency
 
   return (
-    <Box
-      padding={{ base: "35px 35px", md: "50px 75px" }}
-      position="relative"
-      zIndex={999}
+    <AnimatedElement
+      animationType="fade"
+      duration={1.2}
+      delay={0.2}
+      ease="power2.inOut"
+      width="100%"
     >
-      <Flex
-        bg="transparent" // Make background transparent so the circle shows through
-        alignItems="center"
-        justifyContent="space-between"
-        position="relative"
-        zIndex={1001}
+      <HStack
+        ref={headerRef}
+        padding={{ base: "0px 35px", md: "0px 50px", xl: "0px 75px" }}
+        zIndex={"999"}
+        position="fixed"
+        height={"100px"}
+        width={"100%"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+        bg="transparent"
+        transition="all 0.3s ease-in-out"
+        sx={{
+          "&::before": {
+            content: '""',
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backdropFilter:
+              !isOpen && scrolled ? "blur(10px) saturate(180%)" : "none", // Increased blur and saturation
+            WebkitBackdropFilter:
+              !isOpen && scrolled ? "blur(10px) saturate(180%)" : "none",
+            backgroundColor:
+              !isOpen && scrolled ? "rgba(255, 255, 255, 0.65)" : "transparent", // Reduced opacity for more transparency
+            boxShadow:
+              !isOpen && scrolled
+                ? "0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04)" // Layered shadow for depth
+                : "none",
+            borderTop:
+              !isOpen && scrolled
+                ? "1px solid rgba(255, 255, 255, 0.7)"
+                : "none", // Subtle light border on top
+            zIndex: 0,
+            transition: "all 0.4s cubic-bezier(0.16, 1, 0.3, 1)",
+          },
+        }}
       >
-        {/* Logo */}
-        <Link as={RouterLink} to="/">
-          <AnimatePresence mode="wait">
-            {isOpen ? (
-              <MotionImage
-                key="logo-white"
-                height={"50px"}
-                src={logoWhite}
-                alt="Fjong Studio Logo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  duration: 0.5, // Increased from 0.3
-                  ease: "easeOut", // Added easing
-                }}
-              />
-            ) : (
-              <MotionImage
-                key="logo-regular"
-                src={logo}
-                height={"50px"}
-                alt="Fjong Studio Logo"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{
-                  duration: 0.5, // Increased from 0.3
-                  ease: "easeOut", // Added easing
-                }}
-              />
-            )}
-          </AnimatePresence>
-        </Link>
-
-        {/* Mobile menu button */}
-        <IconButton
-          ref={toggleRef}
-          size="md"
-          aria-label={isOpen ? "Close Menu" : "Open Menu"}
-          display={{ md: "none" }}
-          onClick={isOpen ? onClose : onOpen}
-          variant="unstyled"
-          icon={<BurgerMenuIcon isOpen={isOpen} />}
-          position="relative"
-          zIndex={1002}
-        />
-
-        {/* Desktop navigation */}
-        <Stack
-          direction="row"
+        <Flex
+          width={"100%"}
+          bg="transparent" // Make background transparent so the circle shows through
           alignItems="center"
-          display={{ base: "none", md: "flex" }}
+          justifyContent="space-between"
+          position="relative"
           zIndex={1001}
         >
-          <HStack as="nav" spacing="30px" textStyle="links">
-            {Links.map((link, index) => (
-              <React.Fragment key={link.name}>
-                <NavLink to={link.path} isInverted={isOpen}>
-                  {link.name}
-                </NavLink>
-                {index < Links.length - 1 && (
-                  <Box
-                    as="span"
-                    color={isOpen ? "#1a1a1a" : "inherit"}
-                    opacity={0.3}
-                    fontSize="1.125rem"
-                    fontFamily="'Clash Display', sans-serif"
-                  >
-                    /
-                  </Box>
-                )}
-              </React.Fragment>
-            ))}
-          </HStack>
-        </Stack>
-      </Flex>
+          {/* Logo */}
+          <Link as={RouterLink} to="/">
+            <AnimatePresence mode="wait">
+              {isOpen ? (
+                <MotionImage
+                  key="logo-white"
+                  height={"50px"}
+                  src={logoWhite}
+                  alt="Fjong Studio Logo"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 0.5, // Increased from 0.3
+                    ease: "easeOut", // Added easing
+                  }}
+                />
+              ) : (
+                <MotionImage
+                  key="logo-regular"
+                  src={logo}
+                  height={"50px"}
+                  alt="Fjong Studio Logo"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 0.5, // Increased from 0.3
+                    ease: "easeOut", // Added easing
+                  }}
+                />
+              )}
+            </AnimatePresence>
+          </Link>
 
-      {/* Circle animation overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <MotionBox
-            position="fixed"
-            top="0"
-            left="0"
-            width="100vw"
-            height="100vh"
-            pointerEvents="none"
-            zIndex={1000}
-            overflow="hidden"
+          {/* Mobile menu button */}
+          <IconButton
+            ref={toggleRef}
+            size="md"
+            aria-label={isOpen ? "Close Menu" : "Open Menu"}
+            display={{ md: "none" }}
+            onClick={isOpen ? onClose : onOpen}
+            variant="unstyled"
+            icon={<BurgerMenuIcon isOpen={isOpen} />}
+            position="relative"
+            zIndex={1002}
+          />
+
+          {/* Desktop navigation */}
+          <Stack
+            direction="row"
+            alignItems="center"
+            display={{ base: "none", md: "flex" }}
+            zIndex={1001}
           >
-            <Box
-              as="svg"
-              viewBox="0 0 100 100"
-              position="absolute"
+            <HStack as="nav" textStyle="links" gap={!isOpen ? "2rem" : "0rem"}>
+              {links.map((link, index) => (
+                <React.Fragment key={link.name}>
+                  <NavLink to={link.path} isInverted={isOpen}>
+                    {link.name}
+                  </NavLink>
+                  {index < links.length - 1 && (
+                    <Box
+                      as="span"
+                      color={isOpen ? "#1a1a1a" : "inherit"}
+                      opacity={0.1}
+                      fontSize="1.125rem"
+                      fontFamily="'Clash Display', sans-serif"
+                    >
+                      /
+                    </Box>
+                  )}
+                </React.Fragment>
+              ))}
+            </HStack>
+          </Stack>
+        </Flex>
+
+        {/* Circle animation overlay */}
+        <AnimatePresence>
+          {isOpen && (
+            <MotionBox
+              position="fixed"
               top="0"
               left="0"
-              width="100%"
-              height="100%"
+              width="100vw"
+              height="100vh"
+              pointerEvents="none"
+              zIndex={1000}
+              overflow="hidden"
             >
-              <motion.circle
-                cx={togglePosition.x}
-                cy={togglePosition.y}
-                r="0"
-                fill="#1a1a1a"
-                initial={{ r: 0 }}
-                animate={{ r: 1000 }}
-                exit={{ r: 0 }}
-                transition={{
-                  duration: 3,
-                  delay: 0.2, // Add delay to let burger menu animate first
-                  ease: [0.22, 0.61, 0.36, 1],
-                }}
-              />
-            </Box>
-          </MotionBox>
-        )}
-      </AnimatePresence>
+              <Box
+                as="svg"
+                viewBox="0 0 100 100"
+                position="absolute"
+                top="0"
+                left="0"
+                width="100%"
+                height="100%"
+              >
+                <motion.circle
+                  cx={togglePosition.x}
+                  cy={togglePosition.y}
+                  r="0"
+                  fill="#1a1a1a"
+                  initial={{ r: 0 }}
+                  animate={{ r: 1000 }}
+                  exit={{ r: 0 }}
+                  transition={{
+                    duration: 3,
+                    delay: 0.2, // Add delay to let burger menu animate first
+                    ease: [0.22, 0.61, 0.36, 1],
+                  }}
+                />
+              </Box>
+            </MotionBox>
+          )}
+        </AnimatePresence>
 
-      {/* Mobile navigation menu */}
-      <AnimatePresence>
-        {isOpen && (
-          // Update the Mobile navigation menu section
-          <MotionBox
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.6, // Increased from 0.3
-              delay: 0.5, // Adjusted to better match circle animation
-            }}
-            display={{ md: "none" }}
-            position="fixed"
-            top="0"
-            left="0"
-            right="0"
-            bottom="0"
-            zIndex={1000}
-            pointerEvents="auto"
-          >
-            <Center h="100%">
-              <Stack as="nav" spacing="8" align="center" justify="center">
-                {Links.map((link, index) => (
-                  <MotionBox
-                    key={link.name}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{
-                      delay: 0.7 + 0.15 * index, // Increased delay and spacing between items
-                      duration: 0.5, // Increased from 0.3
-                      ease: "easeOut", // Added easing
-                    }}
-                  >
-                    <NavLink to={link.path} isMobile={true} isInverted={true}>
-                      {link.name}
-                    </NavLink>
-                  </MotionBox>
-                ))}
-              </Stack>
-            </Center>
-          </MotionBox>
-        )}
-      </AnimatePresence>
-    </Box>
+        {/* Mobile navigation menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <MotionBox
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{
+                duration: 0.6, // Increased from 0.3
+                delay: 0.5, // Adjusted to better match circle animation
+              }}
+              display={{ md: "none" }}
+              position="fixed"
+              top="0"
+              left="0"
+              right="0"
+              bottom="0"
+              zIndex={1000}
+              pointerEvents="auto"
+            >
+              <Center
+                height={"calc(100vh - 100px)"}
+                alignItems={"center"}
+                mt={"100px"}
+              >
+                <Stack
+                  as="nav"
+                  align="center"
+                  justify="center"
+                  spacing={"5rem"}
+                >
+                  {links.map((link, index) => (
+                    <MotionBox
+                      key={link.name}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: 0.7 + 0.15 * index, // Increased delay and spacing between items
+                        duration: 0.5, // Increased from 0.3
+                        ease: "easeOut", // Added easing
+                      }}
+                    >
+                      <NavLink to={link.path} isMobile={true} isInverted={true}>
+                        {link.name}
+                      </NavLink>
+                    </MotionBox>
+                  ))}
+                </Stack>
+              </Center>
+            </MotionBox>
+          )}
+        </AnimatePresence>
+      </HStack>
+    </AnimatedElement>
   );
 }
 

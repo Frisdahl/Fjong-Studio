@@ -3,7 +3,7 @@
 */
 
 @font-face {
-  font-family: "ClashDisplay-Extralight";
+  font-family: "Clash Display";
   src: url("../fonts/ClashDisplay-Extralight.woff2") format("woff2"),
     url("../fonts/ClashDisplay-Extralight.woff") format("woff"),
     url("../fonts/ClashDisplay-Extralight.ttf") format("truetype");
@@ -13,7 +13,7 @@
 }
 
 @font-face {
-  font-family: "ClashDisplay-Light";
+  font-family: "Clash Display";
   src: url("../fonts/ClashDisplay-Light.woff2") format("woff2"),
     url("../fonts/ClashDisplay-Light.woff") format("woff"),
     url("../fonts/ClashDisplay-Light.ttf") format("truetype");
@@ -24,9 +24,9 @@
 
 @font-face {
   font-family: "Clash Display";
-  src: url("/fonts/ClashDisplay-Regular.woff2") format("woff2"),
-    url("/fonts/ClashDisplay-Regular.woff") format("woff"),
-    url("/fonts/ClashDisplay-Regular.ttf") format("truetype");
+  src: url("../fonts/ClashDisplay-Regular.woff2") format("woff2"),
+    url("../fonts/ClashDisplay-Regular.woff") format("woff"),
+    url("../fonts/ClashDisplay-Regular.ttf") format("truetype");
   font-weight: 400;
   font-display: swap;
   font-style: normal;
