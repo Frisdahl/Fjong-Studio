@@ -9,6 +9,7 @@ import {
   Image,
   HStack,
   Center,
+  Divider,
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
@@ -129,7 +130,6 @@ function Header() {
     const { scrollToSection } = useScroll();
     const isActive = to === activeSection;
 
-    // Create a combined handler for both closing menu and scrolling
     const handleClick = (e: React.MouseEvent) => {
       e.preventDefault(); // Prevent default link behavior
 
@@ -156,7 +156,6 @@ function Header() {
         }
         fontWeight={isActive ? "medium" : "medium"}
         fontSize={isMobile ? "4rem" : "1.25rem"}
-        height={isMobile ? "1.5em" : "1.5em"}
         lineHeight={isMobile ? "1.5em" : "1.5em"}
         textDecoration="none"
         background="none"
@@ -168,9 +167,24 @@ function Header() {
           color: isInverted ? "white.cream" : "accent.blue",
         }}
         transition="color 0.3s"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        role="group"
       >
-        {children}
-        {/* Optionally, you can add a custom underline effect here if needed */}
+        <Box>{children}</Box>
+
+        {!isMobile && (
+          <Divider
+            orientation="horizontal"
+            width="0px"
+            height="1px"
+            backgroundColor={isInverted ? "white.cream" : "accent.blue"}
+            transition="width 0.3s ease-in-out"
+            _groupHover={{ width: "100%" }}
+          />
+        )}
       </Box>
     );
   };
@@ -307,22 +321,11 @@ function Header() {
             zIndex={1001}
           >
             <HStack as="nav" textStyle="links" gap={!isOpen ? "2rem" : "0rem"}>
-              {links.map((link, index) => (
+              {links.map((link) => (
                 <React.Fragment key={link.name}>
                   <NavLink to={link.path} isInverted={isOpen}>
                     {link.name}
                   </NavLink>
-                  {index < links.length - 1 && (
-                    <Box
-                      as="span"
-                      color={isOpen ? "#1a1a1a" : "inherit"}
-                      opacity={0.1}
-                      fontSize="1.125rem"
-                      fontFamily="'Clash Display', sans-serif"
-                    >
-                      /
-                    </Box>
-                  )}
                 </React.Fragment>
               ))}
             </HStack>
