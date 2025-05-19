@@ -53,6 +53,7 @@ function ProjectCards({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       height={"100%"}
+      width={"100%"} // Add this to ensure full width
       flexDirection={"column"}
       alignItems={"flex-start"}
       className="project-card"

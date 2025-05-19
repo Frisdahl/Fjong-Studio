@@ -38,13 +38,6 @@ const colors = {
   },
 };
 
-const headingSpacing = {
-  base: "1.5rem",
-  md: "2rem",
-  lg: "2.5rem",
-  xl: "5rem",
-};
-
 const fontWeights = {
   light: 300,
   normal: 400,
@@ -137,7 +130,6 @@ const theme = extendTheme({
   fontWeights,
   breakpoints,
   space,
-  headingSpacing,
   // You can also customize component-specific styles
   components: {
     Button: {

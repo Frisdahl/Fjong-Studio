@@ -1,11 +1,11 @@
-import React, { useRef, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import {
-  HStack,
   VStack,
   Text,
   Box,
-  Flex,
   useDisclosure,
+  Grid,
+  GridItem,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -91,125 +91,108 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
 const FAQItem: React.FC<{
   item: { question: string; answer: string };
   index: number;
-  indexWidth: number;
-}> = ({ item, index, indexWidth }) => {
+}> = ({ item, index }) => {
   const { isOpen, onToggle } = useDisclosure();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <Box borderBottom="1px solid" borderColor="gray.200" position="relative">
-      <Box
-        pr={"75px"}
-        as="button"
-        onClick={onToggle}
-        width="100%"
-        textAlign="left"
-        borderRadius="md"
-        position="relative"
-        zIndex="1"
-        overflow="hidden"
-        _before={{
-          content: '""',
+    <Box
+      borderBottom="1px solid"
+      borderColor="gray.200"
+      width="100%"
+      display={"flex"}
+      justifyContent={"center"}
+      position="relative"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      overflow="hidden" // Important to contain the animated element
+    >
+      {/* Animated background */}
+      <motion.div
+        initial={false}
+        animate={{
+          scaleY: isHovered ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.4,
+          ease: "easeOut",
+        }}
+        style={{
           position: "absolute",
+          top: 0,
           left: 0,
           right: 0,
-          top: "50%",
-          bottom: "50%",
-          bg: "gray.50",
-          zIndex: "-1",
-          transition:
-            "top 0.4s cubic-bezier(0.4,0,0.2,1), bottom 0.4s cubic-bezier(0.4,0,0.2,1)",
-          borderRadius: "md",
+          bottom: 0,
+          backgroundColor: "var(--chakra-colors-gray-50)",
+          transformOrigin: "center",
+          zIndex: 0,
+          pointerEvents: "none",
         }}
-        _hover={{
-          _before: {
-            top: 0,
-            bottom: 0,
-          },
-        }}
-        transition="background 0.4s cubic-bezier(0.4,0,0.2,1)"
+      />
+
+      {/* Use CSS Grid for alignment */}
+      <Grid
+        templateColumns="auto 1fr auto"
+        columnGap="2rem"
+        width="90%"
+        position="relative"
+        zIndex={1}
       >
-        <Flex justify="space-between" align="center">
-          <HStack p={"25px 0px 25px 75px"} gap={0}>
-            <motion.span
-              style={{
-                display: "inline-block",
-                width: "3rem",
-                textAlign: "right",
-              }}
-              initial={false}
-              animate={{ color: "#718096" }}
-              transition={{ duration: 0.3 }}
-            >
-              <Text textStyle="h5" color="inherit" as="span">
-                {index < 9 ? `0${index + 1}` : index + 1}.
-              </Text>
-            </motion.span>
-            <motion.span
-              style={{
-                display: "inline-block",
-                paddingLeft: `${indexWidth}px`,
-              }}
-              initial={false}
-              animate={{ color: "#2D3748" }}
-              transition={{ duration: 0.3 }}
-            >
-              <Text textStyle="h5" color="inherit" pl={"2rem"}>
-                {item.question}
-              </Text>
-            </motion.span>
-          </HStack>
-          <AnimatedIcon isOpen={isOpen} />
-        </Flex>
-      </Box>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
+        {/* Index Column */}
+        <GridItem alignSelf="start" py="25px">
+          <Text textStyle="h5" color="gray.500" as="span">
+            {index < 9 ? `0${index + 1}` : index + 1}.
+          </Text>
+        </GridItem>
+
+        {/* Content Column - contains both question and answer */}
+        <GridItem>
+          <Box
+            as="button"
+            onClick={onToggle}
+            width="100%"
+            textAlign="left"
+            py="25px"
+            transition="all 0.4s"
+            borderRadius="md"
           >
-            {/* The answer needs to align with the question text, not the index */}
-            {/* So we need: HStack padding + index width + question padding */}
-            <Box
-              pl={`calc(75px + ${indexWidth}px + 3rem + 2rem)`}
-              pr={10}
-              pb={2}
-              maxW={"80%"}
-            >
-              <Text color="gray.600">{item.answer}</Text>
-            </Box>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <Text textStyle="h5" color="gray.700">
+              {item.question}
+            </Text>
+          </Box>
+
+          {/* Answer */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
+                <Box pb="25px">
+                  <Text color="gray.600">{item.answer}</Text>
+                </Box>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </GridItem>
+
+        {/* Icon Column */}
+        <GridItem py="25px" pr="10px" alignSelf="start">
+          <AnimatedIcon isOpen={isOpen} />
+        </GridItem>
+      </Grid>
     </Box>
   );
 };
 
 function FAQ() {
-  // Add state for index width
-  const [indexWidth, setIndexWidth] = useState(0);
-  const measureRef = useRef<HTMLSpanElement>(null);
-
-  // Measure the width of "02." once on mount
-  useLayoutEffect(() => {
-    if (measureRef.current) {
-      setIndexWidth(measureRef.current.offsetWidth);
-    }
-  }, []);
-
   return (
     <VStack spacing={0} align="stretch" width="100%" mx="auto" my={10}>
-      {/* Hidden element to measure the index width */}
-
       <Box borderTop="1px solid" borderColor="gray.200">
         {questions.index.map((item, index) => (
-          <FAQItem
-            key={index}
-            item={item}
-            index={index}
-            indexWidth={indexWidth}
-          />
+          <FAQItem key={index} item={item} index={index} />
         ))}
       </Box>
     </VStack>

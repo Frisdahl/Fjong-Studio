@@ -26,6 +26,32 @@ import ProductMenu from "../components/ProductMenu";
 import Test from "../assets/images/test.webp";
 
 function Homepage() {
+  const heroTitlePadding = {
+    base: "150px",
+    md: "150px",
+    lg: "100px",
+    xl: "150px",
+  };
+  const sectionSpacing = {
+    base: "5rem",
+    md: "5rem",
+    lg: "7.5rem",
+    xl: "10rem",
+  };
+
+  const sectionRadius = {
+    base: "25px",
+    md: "50px",
+    lg: "75px",
+  };
+
+  const headingSpacing = {
+    base: "1.5rem",
+    md: "2rem",
+    lg: "2.5rem",
+    xl: "5rem",
+  };
+
   // Create a ref for the video element
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -55,45 +81,17 @@ function Homepage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const heroTitlePadding = {
-    base: "150px",
-    md: "150px",
-    lg: "100px",
-    xl: "150px",
-  };
-  const sectionSpacing = {
-    base: "5rem",
-    md: "5rem",
-    lg: "7.5rem",
-    xl: "10rem",
-  };
-  const headingSpacing = {
-    base: "1.5rem",
-    md: "2rem",
-    lg: "2.5rem",
-    xl: "5rem",
-  };
-
-  const sectionRadius = {
-    base: "25px",
-    md: "50px",
-    lg: "75px",
-  };
-
   return (
     <>
-      <HStack
-        flexDirection={"column"}
-        alignItems={"flex-start"}
-        padding={{ base: "35px 35px", md: "50px 50px", xl: "50px 75px" }}
-      >
+      <HStack flexDirection={"column"} alignItems={"center"}>
         <Box
           className="hero-section"
           height={{ base: "calc(100vh - 100px)", xl: "calc(100vh - 100px)" }}
-          width="100%"
           display={"flex"}
           flexDirection={{ base: "column", md: "row" }}
           position={"relative"}
+          pt={heroTitlePadding}
+          width="90%"
         >
           <VStack
             alignItems={"flex-start"}
@@ -316,7 +314,7 @@ function Homepage() {
 
         <HStack
           flexDirection={"column"}
-          width={"100%"}
+          width={"90%"}
           alignItems={"flex-start"}
           gap={"0px"}
           mt={sectionSpacing}
@@ -363,30 +361,28 @@ function Homepage() {
       <HStack
         ref={portfolioRef}
         flexDirection={"column"}
-        mx={{ base: "0px", md: "0px", lg: "20px" }}
-        padding={{ base: "75px 35px", md: "150px 75px" }}
         bg={"white.cream"}
         borderRadius={sectionRadius}
-        alignItems={"flex-start"}
         mt={sectionSpacing}
         id="projekter"
+        width={"100%"}
+        justifyContent={"center"}
       >
-        <HStack
-          width={"100%"}
-          justifyContent={"space-between"}
-          alignItems={"flex-end"}
-          mb={headingSpacing}
-        >
-          <VStack flexDirection={"column"} alignItems={"flex-start"}>
-            <Text as={"text"} textStyle={"h5"}>
-              Check ud
-            </Text>
-            <Text as={"h2"} textStyle={"h2"}>
-              vores <br></br> portfolio
-            </Text>
-          </VStack>
+        <HStack width={"90%"} flexDirection={"column"} pt={"150px"}>
+          <HStack
+            width={"100%"}
+            justifyContent={"space-between"}
+            mb={headingSpacing}
+          >
+            <VStack flexDirection={"column"} alignItems={"flex-start"}>
+              <Text as={"text"} textStyle={"h5"}>
+                Check ud
+              </Text>
+              <Text as={"h2"} textStyle={"h2"}>
+                vores <br></br> portfolio
+              </Text>
+            </VStack>
 
-          <HStack flexDirection={"column"} alignItems={"flex-end"}>
             <Text
               as={"text"}
               fontSize={{ base: "1rem", md: "1rem", lg: "1.25rem" }}
@@ -395,62 +391,61 @@ function Homepage() {
               fontWeight={"regular"}
               textAlign={"right"}
               display={{ base: "none", md: "block" }}
-              width={{ base: "100%", md: "75%", lg: "100%" }}
             >
               Vi har hjulpet mange kunder med deres digitale identitet – her er
               et udvalg af vores arbejde.
             </Text>
           </HStack>
-        </HStack>
-        <Grid
-          templateColumns={{
-            base: "1fr",
-            lg: "repeat(2, 1fr)",
-            xl: "repeat(4, 1fr)",
-          }}
-          gap={{ base: "1.875rem", md: "1.875rem", lg: "1.875rem" }}
-          width="100%"
-        >
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={0} bgColor={"accent.blue"} />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={1} bgColor="accent.sand" />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={2} bgColor="gray.mid" />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={3} bgColor="gray.light" />
-          </GridItem>
+          <Grid
+            templateColumns={{
+              base: "1fr",
+              lg: "repeat(2, 1fr)",
+              xl: "repeat(4, 1fr)",
+            }}
+            gap={{ base: "1.875rem", md: "1.875rem", lg: "1.875rem" }}
+            width="100%"
+          >
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={0} bgColor={"accent.blue"} />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={1} bgColor="accent.sand" />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={2} bgColor="gray.mid" />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={3} bgColor="gray.light" />
+            </GridItem>
 
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={3} bgColor="#3B3C3D" />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={3} bgColor="#509ABE" />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={3} bgColor="gray.light" />
-          </GridItem>
-          <GridItem width={"100%"}>
-            <ProjectCards cardIndex={3} bgColor="#FE3828" />
-          </GridItem>
-        </Grid>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={3} bgColor="#3B3C3D" />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={3} bgColor="#509ABE" />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={3} bgColor="gray.light" />
+            </GridItem>
+            <GridItem width={"100%"}>
+              <ProjectCards cardIndex={3} bgColor="#FE3828" />
+            </GridItem>
+          </Grid>
+        </HStack>
       </HStack>
 
       <VStack
+        width={"100%"}
         flexDirection={"column"}
         mt={sectionSpacing}
-        alignItems={"flex-start"}
-        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
-        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
+        alignItems={"center"}
         id="ydelser"
       >
         <VStack
           flexDirection={"column"}
           alignItems={"flex-start"}
           mb={headingSpacing}
+          width={"90%"}
         >
           <Text as={"text"} textStyle={"h5"}>
             Se vores pakker til
@@ -458,119 +453,118 @@ function Homepage() {
           <Text as={"h2"} textStyle={"h2"}>
             hjemmeside
           </Text>
+
+          <ProductMenu />
         </VStack>
 
-        <ProductMenu />
-      </VStack>
-
-      <VStack
-        mx={{ base: "0px", md: "0px", lg: "20px" }}
-        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
-        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
-        borderRadius={sectionRadius}
-        justifyContent={"space-between"}
-        alignItems={"flex-start"}
-        mb={headingSpacing}
-        mt={sectionSpacing}
-        bg={"gray.metallic"}
-        color={"white.cream"}
-        padding={{ base: "75px 35px", md: "150px 75px" }}
-      >
-        <HStack
-          width={"100%"}
+        <VStack
+          borderRadius={sectionRadius}
           justifyContent={"space-between"}
-          alignItems={"flex-end"}
+          alignItems={"center"}
           mb={headingSpacing}
+          mt={sectionSpacing}
+          bg={"gray.metallic"}
+          color={"white.cream"}
+          width={"100%"}
+          pt={sectionSpacing}
         >
-          <HStack flexDirection={"column"} alignItems={"flex-start"}>
-            <Text as={"text"} textStyle={"h5"}>
-              Se hvad vi ellers
-            </Text>
-            <Text as={"h2"} textStyle={"h2"}>
-              tilbyder
-            </Text>
-          </HStack>
-
-          <HStack flexDirection={"column"} alignItems={"flex-end"}>
-            <Text
-              as={"text"}
-              textStyle={"text"}
-              lineHeight={"125%"}
-              maxW={"400px"}
-              textAlign={"right"}
-              display={{ base: "none", md: "block" }}
-              width={{ base: "100%", md: "75%", lg: "100%" }}
+          <VStack width={"90%"}>
+            <HStack
+              mb={headingSpacing}
+              width={"100%"}
+              justifyContent={"space-between"}
             >
-              Udover hjemmesideudvikling tilbyder vi et komplet udvalg af
-              services til visuel branding af produkter og services.
-            </Text>
-          </HStack>
-        </HStack>
-        <SellingCards
-          selectedCard={{
-            title: "Præsentations design",
-            description:
-              "Vi hjælper med at skabe visuelt stærke præsentationer, der gør komplekse budskaber lette at forstå og tiltrækker brugerens opmærksomhed fra første øjekast.",
-            imageSrc: Test,
-          }}
-          services={true}
-        />
-        <SellingCards
-          selectedCard={{
-            title: "Branding og Identitet",
-            description:
-              "Vi styrker din virksomheds visuelle identitet gennem gennemtænkt design, der skaber genkendelighed og troværdighed på tværs af platforme og medier.",
-            imageSrc: Test,
-          }}
-          services={true}
-        />
-        <SellingCards
-          selectedCard={{
-            title: "Tryksager og grafisk design",
-            description:
-              "Vi skaber professionelle materialer som flyers, brochurer, visitkort og plakater, der visuelt understøtter din kommunikation – både digitalt og på tryk.",
-            imageSrc: Test,
-          }}
-          services={true}
-        />
-        <Divider borderColor="1a1a1a" border={"1px solid"} />
+              <HStack flexDirection={"column"} alignItems={"flex-start"}>
+                <Text as={"text"} textStyle={"h5"}>
+                  Se hvad vi ellers
+                </Text>
+                <Text as={"h2"} textStyle={"h2"}>
+                  tilbyder
+                </Text>
+              </HStack>
+
+              <HStack flexDirection={"column"} alignItems={"flex-end"}>
+                <Text
+                  as={"text"}
+                  textStyle={"text"}
+                  lineHeight={"125%"}
+                  maxW={"400px"}
+                  textAlign={"right"}
+                  display={{ base: "none", md: "block" }}
+                  width={{ base: "100%", md: "75%", lg: "100%" }}
+                >
+                  Udover hjemmesideudvikling tilbyder vi et komplet udvalg af
+                  services til visuel branding af produkter og services.
+                </Text>
+              </HStack>
+            </HStack>
+            <SellingCards
+              selectedCard={{
+                title: "Præsentations design",
+                description:
+                  "Vi hjælper med at skabe visuelt stærke præsentationer, der gør komplekse budskaber lette at forstå og tiltrækker brugerens opmærksomhed fra første øjekast.",
+                imageSrc: Test,
+              }}
+              services={true}
+            />
+            <SellingCards
+              selectedCard={{
+                title: "Branding og Identitet",
+                description:
+                  "Vi styrker din virksomheds visuelle identitet gennem gennemtænkt design, der skaber genkendelighed og troværdighed på tværs af platforme og medier.",
+                imageSrc: Test,
+              }}
+              services={true}
+            />
+            <SellingCards
+              selectedCard={{
+                title: "Tryksager og grafisk design",
+                description:
+                  "Vi skaber professionelle materialer som flyers, brochurer, visitkort og plakater, der visuelt understøtter din kommunikation – både digitalt og på tryk.",
+                imageSrc: Test,
+              }}
+              services={true}
+            />
+          </VStack>
+        </VStack>
       </VStack>
 
       <VStack
         ref={servicesRef}
-        alignItems={"flex-start"}
+        alignItems={"center"}
         mt={sectionSpacing}
         width={"100%"}
-        pl={{ base: "35px", md: " 50px", xl: " 75px" }}
-        pr={{ base: "35px", md: " 50px", xl: " 75px" }}
         gap={"0px"}
       >
-        <VStack alignItems={"flex-start"} mb={headingSpacing}>
-          <Text as={"text"} textStyle={"h5"}>
-            Hvem er
-          </Text>
-          <Text as={"h2"} textStyle={"h2"}>
-            Fjong Studio
-          </Text>
-        </VStack>
-        <Grid
-          templateColumns={{ base: "1fr", md: "1fr", lg: "1fr 1fr" }}
-          gap={"50px"}
-          width="100%"
+        <VStack
+          width={"90%"}
+          flexDirection={"column"}
+          alignItems={"flex-start"}
+          mb={headingSpacing}
         >
-          <GridItem>
-            <AboutUsCards />
-          </GridItem>
-        </Grid>
+          <VStack alignItems={"flex-start"} mb={headingSpacing}>
+            <Text as={"text"} textStyle={"h5"}>
+              Hvem er
+            </Text>
+            <Text as={"h2"} textStyle={"h2"}>
+              Fjong Studio
+            </Text>
+          </VStack>
+          <Grid
+            templateColumns={{ base: "1fr", md: "1fr", lg: "1fr 1fr" }}
+            gap={"50px"}
+            width="100%"
+          >
+            <GridItem>
+              <AboutUsCards />
+            </GridItem>
+          </Grid>
+        </VStack>
       </VStack>
 
-      <VStack alignItems={"flex-start"} width={"100%"} mt={sectionSpacing}>
-        <VStack alignItems={"flex-start"} gap={".5rem"}>
-          <VStack
-            alignItems={"flex-start"}
-            pl={{ base: "35px", md: " 50px", xl: " 75px" }}
-            pr={{ base: "35px", md: " 50px", xl: " 75px" }}
-          >
+      <VStack alignItems={"center"} width={"100%"} mt={sectionSpacing}>
+        <VStack alignItems={"flex-start"} gap={".5rem"} width={"90%"}>
+          <VStack alignItems={"flex-start"}>
             <Text as={"text"} textStyle={"h5"}>
               se vores
             </Text>

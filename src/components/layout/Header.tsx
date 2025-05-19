@@ -221,13 +221,12 @@ function Header() {
     >
       <HStack
         ref={headerRef}
-        padding={{ base: "0px 35px", md: "0px 50px", xl: "0px 75px" }}
         zIndex={"999"}
         position="fixed"
         height={"100px"}
         width={"100%"}
-        alignItems={"center"}
-        justifyContent={"space-between"}
+        alignItems={"center"} // Changed from space-between to center
+        justifyContent={"center"} // Changed from space-between to center
         bg="transparent"
         transition="all 0.3s ease-in-out"
         sx={{
@@ -258,10 +257,10 @@ function Header() {
         }}
       >
         <Flex
-          width={"100%"}
-          bg="transparent" // Make background transparent so the circle shows through
+          width={"90%"}
+          bg="transparent"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="space-between" // Keep space-between for logo and nav
           position="relative"
           zIndex={1001}
         >

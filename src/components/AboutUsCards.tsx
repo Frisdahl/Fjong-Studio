@@ -21,7 +21,7 @@ function AboutUsCards() {
         p={{ base: "25px", md: "35px", lg: "50px" }}
         alignItems="start"
         w="100%"
-        boxShadow="0px 4px 20px 0px rgba(27, 26, 26, 0.1)" // Add this line for the shadow
+        bg={"white.light"}
       >
         <VStack
           pb={{ base: "10px", md: "10px", lg: "15px" }}

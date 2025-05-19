@@ -25,6 +25,13 @@ import ScrollRevealText, {
 import ProjectCards from "../ProjectCards";
 
 function Footer() {
+  const sectionSpacing = {
+    base: "5rem",
+    md: "5rem",
+    lg: "7.5rem",
+    xl: "10rem",
+  };
+
   const [isHovered, setIsHovered] = useState(false);
 
   const headingSpacing = {
@@ -68,13 +75,14 @@ function Footer() {
         justifyContent={"center"}
         position={"relative"}
         borderRadius={{ base: "40px 40px 0px 0px", md: "100px 100px 0px 0px" }}
-        padding={{ base: "75px 35px 35px 35px", md: "150px 75px 35px 75px" }}
+        pt={sectionSpacing}
+        pb={"35px"}
         width="100%"
       >
         {/* Main content grid */}
         <Grid
           templateColumns={{ base: "1fr", md: " 1fr", lg: "1fr 1.5fr" }}
-          width="100%"
+          width="90%"
           gap={{ base: "4rem", md: "2rem", lg: "2rem" }}
         >
           {/* Left Column - CTA and copyright */}
