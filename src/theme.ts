@@ -76,12 +76,12 @@ const textStyles = {
     lineHeight: "0.7", // Added this line - value between 0.9-1.0 for tight headings
   },
   h2: {
-    fontSize: ["2.5rem", "3rem", "3.625rem", "4.875rem", "5.875rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["2.5rem", "3rem", "3.725rem", "4.875rem", "5.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "0.8",
   },
   h3: {
-    fontSize: ["1.75rem", "1.75rem", "2.75rem", "4.75rem", "4.875rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["2rem", "1.75rem", "2.5rem", "3rem", "3.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },
