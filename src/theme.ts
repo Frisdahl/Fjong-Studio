@@ -15,6 +15,7 @@ const colors = {
     darkMid: "#1A1A1A70", // 70%
     darkLight: "#1A1A1A30", // 30%
     metallic: "#60666C", // 100%
+    soft: "#444444",
     mid: "#333333", // 100%
     light: "#3E4440", // 100%
   },
@@ -26,16 +27,13 @@ const colors = {
     cream: "#F6F6F6", // 100%
   },
   blue: {
-    light: "#69C9D0", // 100%
     dark: "#005CFF", // 100%
   },
   accent: {
     blue: "#1C1B20", // 100%
-    teal: "#A9BF8F", // 100%
     sand: "#AD9F8F", // 100%
+    darksand: "#6E695D",
     sandLight: "#EAE6DF", // 100%
-    sandMed: "#EAE6DF70", // 70%
-    red: "#EE1D52", // 100%
     yellow: "#FFDC1F", // 100%
   },
 };
@@ -90,7 +88,7 @@ const textStyles = {
     lineHeight: "0.8",
   },
   h3: {
-    fontSize: ["1.75rem", "1.75rem", "3.75rem", "4.75rem", "4.875rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["1.75rem", "1.75rem", "2.75rem", "4.75rem", "4.875rem"], // sm, md, lg, xl, 2xl
     fontWeight: "regular",
     lineHeight: "110%",
   },

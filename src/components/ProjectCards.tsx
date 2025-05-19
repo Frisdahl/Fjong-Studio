@@ -12,14 +12,17 @@ import Iphone from "../assets/images/iphone.webp";
 import { useState } from "react";
 
 interface ProjectCardsProps {
-  cardIndex: number; // Index to select which card content to display
+  cardIndex?: number; // Index to select which card content to display
   bgColor?: string; // Optional background color prop
+  socialMedia?: string; // Optional social media prop
   footerCard?: boolean; // Optional prop to determine if it's a footer card
 }
 
 function ProjectCards({
   cardIndex = 0,
   bgColor = "black.900",
+  socialMedia,
+  footerCard = false,
 }: ProjectCardsProps) {
   const [isHovered, setIsHovered] = useState(false);
   const cardContent = [
@@ -87,16 +90,18 @@ function ProjectCards({
         width="100%"
       >
         <Text as="h4" textStyle="h4" color={"white.100"}>
-          {cardContent[cardIndex].title}
+          {footerCard ? socialMedia : cardContent[cardIndex].title}
         </Text>
-        <Text
-          as="text"
-          textStyle="text"
-          fontSize={{ base: ".75rem", md: "1rem", lg: "1rem" }}
-          color={"white.off"}
-        >
-          {cardContent[cardIndex].description}
-        </Text>
+        {!footerCard && (
+          <Text
+            as="text"
+            textStyle="text"
+            fontSize={{ base: ".75rem", md: "1rem", lg: "1rem" }}
+            color={"white.off"}
+          >
+            {cardContent[cardIndex].description}
+          </Text>
+        )}
         <Button
           bg={isHovered ? "white.cream" : "transparent"}
           color={isHovered ? "font.dark" : "white.cream"}
@@ -112,7 +117,7 @@ function ProjectCards({
           px={{ base: "1rem", md: "1.5rem", lg: "2.5rem" }}
           marginTop={"20px"}
         >
-          se case
+          {footerCard ? `se medie` : "se case"}
           {/* First Arrow Icon (moves out top right on hover) */}
           <Box
             overflow="hidden"
