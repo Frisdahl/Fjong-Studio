@@ -367,6 +367,7 @@ function Homepage() {
         id="projekter"
         width={"100%"}
         justifyContent={"center"}
+        pb={sectionSpacing}
       >
         <HStack width={"90%"} flexDirection={"column"} pt={"150px"}>
           <HStack
@@ -400,7 +401,7 @@ function Homepage() {
           <Grid
             templateColumns={{
               base: "1fr",
-              lg: "repeat(2, 1fr)",
+              lg: "repeat(3, 1fr)",
               xl: "repeat(4, 1fr)",
             }}
             gap={{ base: "1.875rem", md: "1.875rem", lg: "1.875rem" }}
