@@ -27,10 +27,10 @@ import Test from "../assets/images/test.webp";
 
 function Homepage() {
   const heroTitlePadding = {
-    base: "150px",
-    md: "150px",
-    lg: "100px",
-    xl: "150px",
+    base: "9.375rem", // 150px
+    md: "9.375rem", // 150px
+    lg: "6.25rem", // 100px
+    xl: "9.375rem", // 150px
   };
   const sectionSpacing = {
     base: "5rem",
@@ -90,7 +90,7 @@ function Homepage() {
           display={"flex"}
           flexDirection={{ base: "column", md: "row" }}
           position={"relative"}
-          pt={heroTitlePadding}
+          pt={headingSpacing}
           width="90%"
         >
           <VStack
@@ -224,7 +224,7 @@ function Homepage() {
             <Box
               top={{ base: "35%", md: "25%", lg: "0%" }}
               // Align right on desktop, left on tablet
-              right={{ base: "0%", md: "0%", lg: "75px" }}
+              right={{ base: "0%", md: "0%", lg: "5%", xl: "0%" }}
               position={"absolute"}
               as="video"
               ref={videoRef}
@@ -373,6 +373,7 @@ function Homepage() {
             width={"100%"}
             justifyContent={"space-between"}
             mb={headingSpacing}
+            alignItems={"flex-end"}
           >
             <VStack flexDirection={"column"} alignItems={"flex-start"}>
               <Text as={"text"} textStyle={"h5"}>
@@ -473,6 +474,7 @@ function Homepage() {
               mb={headingSpacing}
               width={"100%"}
               justifyContent={"space-between"}
+              alignItems={"flex-end"}
             >
               <HStack flexDirection={"column"} alignItems={"flex-start"}>
                 <Text as={"text"} textStyle={"h5"}>

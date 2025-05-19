@@ -125,7 +125,6 @@ function Header() {
     children,
     to,
     isMobile = false,
-    isInverted = false,
   }) => {
     const { scrollToSection } = useScroll();
     const isActive = to === activeSection;
@@ -151,9 +150,6 @@ function Header() {
       <Box
         as="button"
         onClick={handleClick}
-        color={
-          isInverted ? "white.cream" : isActive ? "accent.blue" : "inherit"
-        }
         fontWeight={isActive ? "medium" : "medium"}
         fontSize={isMobile ? "4rem" : "1.25rem"}
         lineHeight={isMobile ? "1.5em" : "1.5em"}
@@ -163,9 +159,6 @@ function Header() {
         cursor="pointer"
         position="relative"
         _focus={{ outline: "none" }}
-        _hover={{
-          color: isInverted ? "white.cream" : "accent.blue",
-        }}
         transition="color 0.3s"
         display="flex"
         flexDirection="column"
@@ -180,7 +173,6 @@ function Header() {
             orientation="horizontal"
             width="0px"
             height="1px"
-            backgroundColor={isInverted ? "white.cream" : "accent.blue"}
             transition="width 0.3s ease-in-out"
             _groupHover={{ width: "100%" }}
           />
