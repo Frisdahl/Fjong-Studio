@@ -247,6 +247,7 @@ function SellingCards({
           flexDirection="column"
           alignItems="flex-start"
           width={{ base: "100%", md: "75%" }}
+          gap={"1rem"}
         >
           <Box>
             <Text

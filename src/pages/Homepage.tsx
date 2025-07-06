@@ -95,7 +95,7 @@ function Homepage() {
         >
           <VStack
             alignItems={"flex-start"}
-            width={{ base: "100%", lg: "50%", xl: "100%" }}
+            width={{ base: "100%", lg: "70%", xl: "100%" }}
             maxWidth={{ base: "100%", md: "90%", lg: "100%" }}
             spacing={4}
             position={"relative"}
@@ -114,7 +114,6 @@ function Homepage() {
                 color="font.dark"
                 pt={heroTitlePadding}
                 whiteSpace="normal"
-                marginRight="10px"
               >
                 {/* First line of text */}
                 <ScrollRevealText
@@ -446,15 +445,16 @@ function Homepage() {
         <VStack
           flexDirection={"column"}
           alignItems={"flex-start"}
-          mb={headingSpacing}
           width={"90%"}
         >
-          <Text as={"text"} textStyle={"h5"}>
-            Se vores pakker til
-          </Text>
-          <Text as={"h2"} textStyle={"h2"}>
-            hjemmeside
-          </Text>
+          <VStack alignItems={"flex-start"} mb={headingSpacing}>
+            <Text as={"text"} textStyle={"h5"}>
+              Se vores pakker til
+            </Text>
+            <Text as={"h2"} textStyle={"h2"}>
+              hjemmeside
+            </Text>
+          </VStack>
 
           <ProductMenu />
         </VStack>

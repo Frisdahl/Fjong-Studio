@@ -65,6 +65,7 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
         width="100%"
         height="2px" // Slightly thicker line
         bg="gray.600"
+        borderRadius={"2px"}
       />
 
       {/* Vertical line (animates in/out) */}
@@ -78,6 +79,7 @@ const AnimatedIcon: React.FC<AnimatedIconProps> = ({ isOpen }) => {
         style={{
           position: "absolute",
           width: "2px", // Slightly thicker line
+          borderRadius: "2px",
           height: iconSize, // Match the box height
           backgroundColor: "var(--chakra-colors-gray-600)",
           transformOrigin: "center",

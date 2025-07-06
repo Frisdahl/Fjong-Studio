@@ -70,7 +70,8 @@ const breakpoints = {
 // Define text styles for typography
 const textStyles = {
   h1: {
-    fontSize: ["2.25rem", "3.25rem", "3rem", "4.875rem", "7.875rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["2.25rem", "3.25rem", "3rem", "5.5rem", "7.875rem"], // sm, md, lg, xl, 2xl
+    fontFamily: "Clash Display",
     fontWeight: "regular",
     letterSpacing: "-0.02em",
     lineHeight: "0.7", // Added this line - value between 0.9-1.0 for tight headings
@@ -100,7 +101,7 @@ const textStyles = {
     fontWeight: "medium",
   },
   text: {
-    fontSize: ["1rem", "1.125rem", "1.25rem"], // sm, md, lg, xl, 2xl
+    fontSize: ["1rem", "1rem", "1rem"], // sm, md, lg, xl, 2xl
     lineHeight: "100%",
     fontWeight: "light",
   },

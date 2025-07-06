@@ -40,7 +40,12 @@ function AboutUsCards() {
           </Text>
         </VStack>
 
-        <Divider borderColor="font.dark" opacity={0.3} borderWidth="1px" />
+        <Divider
+          borderColor="font.dark"
+          opacity={0.1}
+          borderWidth=".5px"
+          borderRadius={"1px"}
+        />
 
         {/* Main content section - stack vertically on mobile */}
         <Flex
@@ -60,9 +65,9 @@ function AboutUsCards() {
             <HStack alignItems="flex-start">
               <Image
                 src={asterisk}
-                boxSize={{ base: "0.8rem", md: "1rem" }}
+                boxSize={{ base: ".5rem", md: "1rem" }}
                 color="font"
-                opacity="50%"
+                opacity="30%"
               />
               <Text as="text" textStyle="text" color="font">
                 {AboutUs.workarea1}
@@ -72,9 +77,9 @@ function AboutUsCards() {
             <HStack alignItems="flex-start" spacing={3}>
               <Image
                 src={asterisk}
-                boxSize={{ base: "0.8rem", md: "1rem" }}
+                boxSize={{ base: "0.5rem", md: "1rem" }}
                 color="font"
-                opacity="50%"
+                opacity="30%"
               />
               <Text as="text" textStyle="text" color="font">
                 {AboutUs.workarea2}
