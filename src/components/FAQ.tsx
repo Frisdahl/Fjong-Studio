@@ -6,6 +6,7 @@ import {
   useDisclosure,
   Grid,
   GridItem,
+  Button,
 } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -35,6 +36,23 @@ const questions = {
       question: "Kan i hjælpe med vedligeholdelse efter siden er lanceret?",
       answer:
         "Ja, vi tilbyder vedligeholdelsespakker, der inkluderer opdateringer, sikkerhedskopier og support. Vi ønsker at sikre, at din hjemmeside altid fungerer optimalt.",
+    },
+    {
+      question:
+        "Hvordan sikrer I, at designet matcher min virksomheds visuelle identitet?",
+      answer:
+        "Vi tager udgangspunkt i din eksisterende branding – fx logo, farver og typografi – og integrerer det i designet. Har du ikke en visuel identitet endnu, hjælper vi gerne med at udvikle en sammen med dig.",
+    },
+    {
+      question: "Er hjemmesidens design mobilvenligt og responsivt?",
+      answer:
+        "Ja, vi designer altid med mobil først i tankerne. Alle vores løsninger tilpasses automatisk til mobil, tablet og desktop, så brugeren får en god oplevelse uanset enhed.",
+    },
+    {
+      question:
+        "Får jeg mulighed for at godkende designet, inden I bygger siden?",
+      answer:
+        "Absolut. Vi laver først en visuel prototype eller mockup, som du kan gennemgå og komme med feedback til. Først når du er tilfreds, går vi videre til selve udviklingen.",
     },
   ],
 };
@@ -190,12 +208,85 @@ const FAQItem: React.FC<{
 };
 
 function FAQ() {
+  const [showAllQuestions, setShowAllQuestions] = useState(false);
+
+  // Show first 5 questions or all questions based on state
+  const questionsToShow = showAllQuestions
+    ? questions.index
+    : questions.index.slice(0, 5);
+
+  const toggleQuestions = () => {
+    setShowAllQuestions(!showAllQuestions);
+  };
+
   return (
     <VStack spacing={0} align="stretch" width="100%" mx="auto" my={10}>
       <Box borderTop="1px solid" borderColor="gray.200">
-        {questions.index.map((item, index) => (
+        {/* First 5 questions - always visible */}
+        {questions.index.slice(0, 5).map((item, index) => (
           <FAQItem key={index} item={item} index={index} />
         ))}
+        
+        {/* Additional questions with animation */}
+        <AnimatePresence>
+          {showAllQuestions && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ 
+                opacity: 1, 
+                height: "auto"
+              }}
+              exit={{ 
+                opacity: 0, 
+                height: 0
+              }}
+              transition={{ 
+                duration: 0.6,
+                ease: "easeInOut",
+                opacity: { duration: 0.4 }
+              }}
+              style={{ overflow: "hidden" }}
+            >
+              {questions.index.slice(5).map((item, index) => (
+                <motion.div
+                  key={index + 5}
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0
+                  }}
+                  transition={{ 
+                    duration: 0.4,
+                    delay: index * 0.1,
+                    ease: "easeOut"
+                  }}
+                >
+                  <FAQItem item={item} index={index + 5} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Box>
+
+      {/* Toggle Button */}
+      <Box display="flex" justifyContent="center" mt={8}>
+        <Button
+          onClick={toggleQuestions}
+          bg={"font.dark"}
+          color={"white.cream"}
+          fontWeight={"regular"}
+          _hover={{ bg: "font.dark" }}
+          borderRadius={"50px"}
+          p={"15px 35px"}
+          height="auto"
+          position="relative"
+          overflow="hidden"
+        >
+          <Text textStyle="body">
+            {showAllQuestions ? "Skjul spørgsmål" : `se alle spørgsmål`}
+          </Text>
+        </Button>
       </Box>
     </VStack>
   );

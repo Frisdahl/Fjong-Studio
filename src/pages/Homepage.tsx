@@ -578,19 +578,6 @@ function Homepage() {
         </VStack>
         <VStack width={"100%"}>
           <FAQ />
-          <Button
-            bg={"font.dark"}
-            color={"white.cream"}
-            fontWeight={"regular"}
-            _hover={{ bg: "font.dark" }}
-            borderRadius={"50px"}
-            p={"15px 35px"}
-            height="auto"
-            position="relative"
-            overflow="hidden"
-          >
-            se alle spørgsmål
-          </Button>
         </VStack>
       </VStack>
 
